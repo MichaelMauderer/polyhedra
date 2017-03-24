@@ -92,7 +92,7 @@ func (gg*IcosahedralGeodesic) CheckIntegrity() error {
 	return nil
 }
 
-func (gg *Geodesic) subdivide(m, n int) error {
+func (gg *Geodesic) Subdivide(m, n int) error {
 
 	if m == n {
 		return errors.New("Class II not supported")

@@ -8,7 +8,7 @@ func TestGGSubdivision(t *testing.T) {
 
 	checkSubdivision := func(m, n int) {
 		gg := NewIcosahedralGeodesic()
-		err := gg.subdivide(m, n)
+		err := gg.Subdivide(m, n)
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
@@ -50,7 +50,7 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 	for i := 2; i < 5; i++ {
 		m = m * 2
 		t.Logf("Testing (m=%v,n=%v) from n=%v", m, n, n/2)
-		err := gg.subdivide(2, n)
+		err := gg.Subdivide(2, n)
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
