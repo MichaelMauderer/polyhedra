@@ -43,7 +43,7 @@ func (e Edge) Equal(other Edge) bool {
 type Vertex uint
 
 var vertexId Vertex = 0
-var vertexPositions map[Vertex]CartesianCoordinates
+var vertexPositions = make(map[Vertex]CartesianCoordinates)
 
 func NewVertex() Vertex {
 	vertexId++
