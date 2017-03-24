@@ -77,17 +77,17 @@ func (ig *IcosahedralGeodesic) checkVertices() error {
 }
 
 func (gg*IcosahedralGeodesic) CheckIntegrity() error {
-	error := gg.checkFaces()
-	if error != nil {
-		return error
+	err := gg.checkFaces()
+	if err != nil {
+		return err
 	}
-	error = gg.checkEdges()
-	if error != nil {
-		return error
+	err = gg.checkEdges()
+	if err != nil {
+		return err
 	}
-	error = gg.checkVertices()
-	if error != nil {
-		return error
+	err = gg.checkVertices()
+	if err != nil {
+		return err
 	}
 	return nil
 }
