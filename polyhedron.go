@@ -12,6 +12,10 @@ func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) {
 	p.edges = append(p.edges, Edge{v1, v2})
 }
 
+func (p *Polyhedron) Vertices() []Vertex {
+	return p.vertices
+}
+
 func (p *Polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
