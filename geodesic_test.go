@@ -9,7 +9,7 @@ func TestGGSubdivision(t *testing.T) {
 	poly := NewIcosahedron()
 
 	checkSubdivision := func(n, m int) {
-		var gg IcoGG = IcoGG{GeodesicGrid{poly}};
+		var gg IcosahedralGeodesic = IcosahedralGeodesic{Geodesic{poly}};
 		err := gg.subdivide(n, m)
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
@@ -29,7 +29,7 @@ func TestGGSubdivision(t *testing.T) {
 func TestGGRepeatedSubdivision(t *testing.T) {
 
 	poly := NewIcosahedron()
-	gg := IcoGG{GeodesicGrid{poly}}
+	gg := IcosahedralGeodesic{Geodesic{poly}}
 	err := gg.checkIntegrity()
 	if err != nil {
 		t.Fatal(err)

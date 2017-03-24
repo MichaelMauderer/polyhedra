@@ -5,15 +5,15 @@ import (
 	"fmt"
 )
 
-type GeodesicGrid struct {
+type Geodesic struct {
 	Polyhedron
 }
 
-type IcoGG struct {
-	GeodesicGrid
+type IcosahedralGeodesic struct {
+	Geodesic
 }
 
-func (gg*IcoGG) checkIntegrity() error {
+func (gg*IcosahedralGeodesic) checkIntegrity() error {
 	faceNum := len(gg.faces)
 	if faceNum%20 != 0 {
 		return errors.New("Number of faces is not a multiple of 20.")
@@ -35,7 +35,7 @@ func (gg*IcoGG) checkIntegrity() error {
 	return nil
 }
 
-func (gg *GeodesicGrid) subdivide(n, m int) error {
+func (gg *Geodesic) subdivide(n, m int) error {
 
 	if m == n {
 		return errors.New("Class II not supported")
