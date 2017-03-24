@@ -21,6 +21,16 @@ func (p *Polyhedron) AddFace(vertices []Vertex) {
 	p.faces = append(p.faces, Face{edges})
 }
 
+func (p *Polyhedron) VertexDegree(vertex Vertex) int {
+	degree := 0
+	for _, edge := range p.edges {
+		if vertex == edge.v1 || vertex == edge.v2 {
+			degree += 1
+		}
+	}
+	return degree
+}
+
 type Face struct {
 	edges []Edge
 }

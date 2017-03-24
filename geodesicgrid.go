@@ -2,6 +2,7 @@ package polyhedra
 
 import (
 	"errors"
+	"fmt"
 )
 
 type GeodesicGrid struct {
@@ -24,6 +25,12 @@ func (gg*IcoGG) checkIntegrity() error {
 	vertexNum := len(gg.vertices)
 	if (vertexNum-2)%10 != 0 {
 		return errors.New("Number of vertices does not fulfill V=(T*10+2)")
+	}
+	for _, vertex := range gg.vertices {
+		vD := gg.VertexDegree(vertex)
+		if (vD != 5) || (vD != 6) {
+			return errors.New(fmt.Sprintf("Invalid number of edges at vertex %v: %v. Should be 5 or 6", vertex, vD))
+		}
 	}
 	return nil
 }
