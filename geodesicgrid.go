@@ -28,7 +28,7 @@ func (gg*IcoGG) checkIntegrity() error {
 	}
 	for _, vertex := range gg.vertices {
 		vD := gg.VertexDegree(vertex)
-		if (vD != 5) || (vD != 6) {
+		if (vD != 5) && (vD != 6) {
 			return errors.New(fmt.Sprintf("Invalid number of edges at vertex %v: %v. Should be 5 or 6", vertex, vD))
 		}
 	}

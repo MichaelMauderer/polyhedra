@@ -28,9 +28,12 @@ func TestGGSubdivision(t *testing.T) {
 
 func TestGGRepeatedSubdivision(t *testing.T) {
 
-
 	poly := NewIcosahedron()
 	gg := IcoGG{GeodesicGrid{poly}}
+	err := gg.checkIntegrity()
+	if err != nil {
+		t.Fatal(err)
+	}
 	m := 0
 	n := 1
 	for i := 2; i < 10; i++ {
