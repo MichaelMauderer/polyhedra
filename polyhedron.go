@@ -39,6 +39,9 @@ func (e Edge) Equal(other Edge) bool {
 	}
 	return e.v1 == other.v2 && e.v2 == other.v1
 }
+func (e Edge) Reversed() Edge {
+	return Edge{e.v2, e.v1}
+}
 
 type Vertex uint
 
