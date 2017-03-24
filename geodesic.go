@@ -8,10 +8,18 @@ import (
 
 type Geodesic struct {
 	Polyhedron
+	m, n int
 }
 
 type IcosahedralGeodesic struct {
 	Geodesic
+}
+
+func NewIcosahedralGeodesic() *IcosahedralGeodesic {
+	ico := NewIcosahedron()
+	geo := Geodesic{ico, 1, 0}
+	icoGeo := IcosahedralGeodesic{geo}
+	return &icoGeo
 }
 
 func cullDuplicates(edges []Edge) []Edge {
@@ -205,6 +213,8 @@ func (gg *Geodesic) subdivide(m, n int) error {
 	// TODO: Avoid creation of duplicates in the first place.
 	gg.edges = cullDuplicates(newEdges)
 	gg.faces = newFaces
+	gg.m *= m
+	gg.n *= n
 
 	return nil
 }
