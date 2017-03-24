@@ -2,27 +2,39 @@ package polyhedra
 
 import (
 	"testing"
-	"log"
 )
 
 func TestGGSubdivision(t *testing.T) {
 	poly := NewIcosahedron()
 
-	checkSubdivision := func(n, m int) {
+	checkSubdivision := func(m, n int) {
 		var gg IcosahedralGeodesic = IcosahedralGeodesic{Geodesic{poly}};
-		err := gg.subdivide(n, m)
+		err := gg.subdivide(m, n)
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
-		err = gg.checkIntegrity()
+		T := n*m + n*n + m*m
+		faceNum := len(gg.faces)
+		if faceNum != T*20 {
+			t.Errorf("Number of faces is %v instead of %v.", faceNum, 20*T)
+		}
+		edgeNum := len(gg.edges)
+		if edgeNum != T*30 {
+			t.Errorf("Number of edges is %v instead of %v.", edgeNum, 30*T)
+		}
+		vertexNum := len(gg.vertices)
+		if vertexNum != T*10+2 {
+			t.Errorf("Number of vertices is %v instead of %v.", vertexNum, 10*T+3)
+		}
+		err = gg.CheckIntegrity()
 		if err != nil {
-			t.Fatalf("Subdivision (%v,%v) created illegal GG: %v", n, m, err)
+			t.Errorf("Subdivision (n=%v,m=%v) created illegal structure: %v", n, m, err)
 		}
 	}
-	m := 0
-	for n := 2; n < 99; n++ {
-		log.Printf("Testing (m=%v,n=%v)", m, n)
-		checkSubdivision(n, m)
+	n := 0
+	for m := 2; m < 3; m++ {
+		t.Logf("Testing (m=%v,n=%v)", m, n)
+		checkSubdivision(m, n)
 	}
 }
 
@@ -30,20 +42,21 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 
 	poly := NewIcosahedron()
 	gg := IcosahedralGeodesic{Geodesic{poly}}
-	err := gg.checkIntegrity()
+	err := gg.CheckIntegrity()
 	if err != nil {
 		t.Fatal(err)
 	}
-	m := 0
-	n := 1
-	for i := 2; i < 10; i++ {
-		n = n * 2
-		log.Printf("Testing (m=%v,n=%v) from n=%v", m, n, n/2)
-		err := gg.subdivide(2, m)
+
+	n := 0
+	m := 1
+	for i := 2; i < 5; i++ {
+		m = m * 2
+		t.Logf("Testing (m=%v,n=%v) from n=%v", m, n, n/2)
+		err := gg.subdivide(2, n)
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
-		err = gg.checkIntegrity()
+		err = gg.CheckIntegrity()
 		if err != nil {
 			t.Fatalf("Subdivision (%v,%v) created illegal GG: %v", n, m, err)
 		}
