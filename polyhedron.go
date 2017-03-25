@@ -16,6 +16,10 @@ func (p *Polyhedron) Vertices() []Vertex {
 	return p.vertices
 }
 
+func (p *Polyhedron) Edges() []Edge {
+	return p.edges
+}
+
 func (p *Polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
@@ -41,6 +45,10 @@ type Face struct {
 
 type Edge struct {
 	v1, v2 Vertex
+}
+
+func (e Edge) Length() float64 {
+	return Distance(e.v1.Position(), e.v2.Position())
 }
 
 func (e Edge) Contains(v Vertex) bool {

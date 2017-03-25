@@ -1,5 +1,7 @@
 package polyhedra
 
+import "math"
+
 type CartesianCoordinate struct {
 	x, y, z float64
 }
@@ -37,4 +39,11 @@ func WeightedCentroid(points []CartesianCoordinate, weights []float64) Cartesian
 	z /= float64(len(points)) * wSum
 
 	return CartesianCoordinate{x, y, z}
+}
+
+func Distance(p1 CartesianCoordinate, p2 CartesianCoordinate) float64 {
+	dx := p1.x - p2.x
+	dy := p1.y - p2.y
+	dz := p1.z - p2.z
+	return math.Sqrt(dx*dx + dy*dy + dz*dz)
 }
