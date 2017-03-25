@@ -112,10 +112,22 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	newEdges := make([]Edge, 0, 30*t)
 
 	newVertices := make(map[Edge]([]Vertex))
-	for edge_i := range gg.edges {
+	for edge_i, edge := range gg.edges {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
 			nV[j] = NewVertex()
+			c := WeightedCentroid(
+				[]CartesianCoordinate{
+					vertexPositions[edge.v1],
+					vertexPositions[edge.v2],
+				},
+				[]float64{
+					float64(j+1),
+					float64(len(nV)),
+				},
+			)
+
+			vertexPositions[nV[j]] = c
 			gg.vertices = append(gg.vertices, nV[j])
 		}
 		newVertices[gg.edges[edge_i]] = nV

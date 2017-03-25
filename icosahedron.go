@@ -6,7 +6,7 @@ func NewIcosahedron() Polyhedron {
 
 	ico := Polyhedron{}
 
-	vertexPos := []CartesianCoordinates{
+	vertexPos := []CartesianCoordinate{
 		// Top Vertex
 		{0, 0, 1},
 		// Bottom Vertex

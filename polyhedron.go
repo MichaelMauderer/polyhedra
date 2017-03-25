@@ -60,17 +60,17 @@ func (e Edge) Reversed() Edge {
 type Vertex uint
 
 var vertexId Vertex = 0
-var vertexPositions = make(map[Vertex]CartesianCoordinates)
+var vertexPositions = make(map[Vertex]CartesianCoordinate)
 
 func NewVertex() Vertex {
 	vertexId++
 	return vertexId
 }
 
-func (v Vertex) setPosition(coords CartesianCoordinates) {
+func (v Vertex) setPosition(coords CartesianCoordinate) {
 	vertexPositions[v] = coords
 }
 
-func (v Vertex) Position() CartesianCoordinates {
+func (v Vertex) Position() CartesianCoordinate {
 	return vertexPositions[v]
 }
