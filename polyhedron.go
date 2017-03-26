@@ -22,13 +22,17 @@ func (p *Polyhedron) Edges() []Edge {
 	return p.edges
 }
 
+func (p *Polyhedron) Faces() []Face {
+	return p.faces
+}
+
 func (p *Polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)
 		edges[i] = Edge{vertex, vertices[nextI]}
 	}
-	p.faces = append(p.faces, Face{edges})
+	p.faces = append(p.faces, Face{vertices})
 }
 
 func (p *Polyhedron) VertexDegree(vertex Vertex) int {
@@ -55,7 +59,7 @@ func (p *Polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
 }
 
 type Face struct {
-	edges []Edge
+	Loop []Vertex
 }
 
 type Edge struct {

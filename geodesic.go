@@ -81,12 +81,13 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 
 	for _, face := range gg.faces {
 
-		e0 := face.edges[0]
-		v0 := e0.v1
-		e1 := face.edges[1]
-		v1 := e1.v1
-		e2 := face.edges[2]
-		v2 := e2.v1
+		v0 := face.Loop[0]
+		v1 := face.Loop[1]
+		v2 := face.Loop[2]
+
+		e0 := Edge{v0, v1}
+		e1 := Edge{v1, v2}
+		e2 := Edge{v2, v0}
 
 		// Create subdivision vertices
 		vertexRows := make([][]Vertex, m+1)
@@ -145,7 +146,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			newEdges = append(newEdges, ne1)
 			newEdges = append(newEdges, ne2)
 
-			nF := Face{[]Edge{ne0, ne1, ne2}}
+			nF := Face{[]Vertex{nV0, nV1, nV2}}
 
 			newFaces = append(newFaces, nF)
 		}

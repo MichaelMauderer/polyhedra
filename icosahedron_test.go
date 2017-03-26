@@ -40,24 +40,9 @@ func TestIcosahedronCreation(t *testing.T) {
 
 	for _, edge := range ico.edges {
 		face_count := 0
-		for _, face := range ico.faces {
-			for _, face_edge := range face.edges {
-				if face_edge.Equal(edge) {
-					face_count++
-				}
-			}
-
-		}
 		if face_count != 2 {
 			t.Errorf("Edge %v is contained in %v faces instaed of 2", edge, face_count)
 		}
 	}
 
-	for _, face := range ico.faces {
-		edgeCount := len(face.edges)
-		if edgeCount != 3 {
-			t.Errorf("Face %v has %v edges instead of 3", face, edgeCount)
-		}
-
-	}
 }

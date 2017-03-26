@@ -35,37 +35,37 @@ func CounterClockwise2D(v []Point2D) sort.Interface {
 type counterClockwise struct {
 	v      []Point2D
 	center Point2D
+
 }
 
 func (v counterClockwise) Len() int      { return len(v.v) }
 func (v counterClockwise) Swap(i, j int) { v.v[i], v.v[j] = v.v[j], v.v[i] }
 func (v counterClockwise) Less(i, j int) bool {
-	return ccLess(v.v[i], v.v[i], v.center)
+	return ccLess(v.v[i], v.v[j], v.center)
 }
 
 func ccLess(a, b, center Point2D) bool {
-
+	dax := a.X-center.X
+	dbx := b.X-center.X
 	// http://stackoverflow.com/a/6989383/1175813
-	if a.X-center.X >= 0 && b.X-center.X < 0 {
+	if  dax >= 0.0 &&  dbx < 0.0 {
 		return true
 	}
-	if a.X-center.X < 0 && b.X-center.X >= 0 {
+	if dax < 0.0 && dbx >= 0.0 {
 		return false
 	}
-	if a.X-center.X == 0 && b.X-center.X == 0 {
-		if a.X-center.X >= 0 || b.X-center.X >= 0 {
-			return a.X > b.X
+	if dax == 0.0 && dbx == 0.0 {
+		if a.Y-center.Y >= 0 || b.Y-center.Y >= 0 {
+			return a.Y > b.Y
 		}
-		return b.X > a.X
+		return b.Y > a.Y
 	}
 
 	// compute the cross product of vectors (center -> a) X (center -> b)
-	det := (a.X-center.X)*(b.X-center.X) - (b.X-center.X)*(a.X-center.X)
+	det := dax*(b.Y-center.Y) - dbx*(a.Y-center.Y)
 	if det < 0 {
-
 		return true
 	}
-
 	if det > 0 {
 		return false
 	}
@@ -107,7 +107,6 @@ func SubdivideTriangle(triangle Triangle, n, m int) ([]Triangle, error) {
 
 	// Walk through the rows of the triangle
 	// Connect the vertices above and below
-
 	for row := 0; row < n; row++ {
 		for i, vertex := range vertexRows[row] {
 			v1 := vertexRows[row+1][i]
