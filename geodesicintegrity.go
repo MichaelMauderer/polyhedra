@@ -7,9 +7,9 @@ import (
 	"log"
 )
 
-type IcosahedriGeodesicIntegrityChecker IcosahedralGeodesic
+type IcosahedralGeodesicIntegrityChecker IcosahedralGeodesic
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkFaces() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkFaces() error {
 	faceNum := len(gic.faces)
 	if faceNum%20 != 0 {
 		return errors.New("Number of faces is not a multiple of 20.")
@@ -17,7 +17,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkFaces() error {
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkEdges() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 	edgeNum := len(gic.edges)
 	if edgeNum%30 != 0 {
 		return errors.New("Number of faces is not a multiple of 30.")
@@ -35,7 +35,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkEdges() error {
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkVertexNum() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkVertexNum() error {
 	vertexNum := len(gic.vertices)
 	if (vertexNum-2)%10 != 0 {
 		return errors.New("Number of vertices does not fulfill V=(T*10+2)")
@@ -43,7 +43,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkVertexNum() error {
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkVertexDegrees() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDegrees() error {
 	foundWrongOne := false
 	for _, vertex := range gic.vertices {
 		if vertex == 0 {
@@ -61,7 +61,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkVertexDegrees() error {
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkDistinctVertexNeighbors() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkDistinctVertexNeighbors() error {
 	for _, vertex := range gic.vertices {
 		neighbors := gic.AdjacentVertices(vertex)
 		counts := make(map[Vertex]int)
@@ -80,7 +80,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkDistinctVertexNeighbors() err
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) checkVertexDistances() error {
+func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 	bp1 := gic.edges[0].v1.Position()
 	bp2 := gic.edges[0].v2.Position()
 	baseLineDistance := bp1.VectorTo(bp2).Length()
@@ -97,7 +97,7 @@ func (gic IcosahedriGeodesicIntegrityChecker) checkVertexDistances() error {
 	return nil
 }
 
-func (gic IcosahedriGeodesicIntegrityChecker) CheckIntegrity() []error {
+func (gic IcosahedralGeodesicIntegrityChecker) CheckIntegrity() []error {
 
 	var checks = []func() error{
 		gic.checkFaces,
@@ -107,12 +107,12 @@ func (gic IcosahedriGeodesicIntegrityChecker) CheckIntegrity() []error {
 		gic.checkVertexDistances,
 		gic.checkDistinctVertexNeighbors,
 	}
-	errors := make([]error, 0, len(checks))
+	errs := make([]error, 0, len(checks))
 	for _, check := range checks {
 		err := check()
 		if err != nil {
-			errors = append(errors, err)
+			errs = append(errs, err)
 		}
 	}
-	return errors
+	return errs
 }

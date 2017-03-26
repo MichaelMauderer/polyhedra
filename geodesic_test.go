@@ -26,7 +26,7 @@ func TestGGSubdivision(t *testing.T) {
 		if vertexNum != T*10+2 {
 			t.Errorf("Number of vertices is %v instead of %v.", vertexNum, 10*T+3)
 		}
-		errs := IcosahedriGeodesicIntegrityChecker(*gg).CheckIntegrity()
+		errs := IcosahedralGeodesicIntegrityChecker(*gg).CheckIntegrity()
 		if len(errs) != 0 {
 			t.Errorf("Subdivision (n=%v,m=%v) created illegal structure: %v", n, m, errs)
 		}
@@ -41,7 +41,7 @@ func TestGGSubdivision(t *testing.T) {
 func TestGGRepeatedSubdivision(t *testing.T) {
 
 	gg := NewIcosahedralGeodesic()
-	err := IcosahedriGeodesicIntegrityChecker(*gg).CheckIntegrity()
+	err := IcosahedralGeodesicIntegrityChecker(*gg).CheckIntegrity()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
-		errs := IcosahedriGeodesicIntegrityChecker(*gg).CheckIntegrity()
+		errs := IcosahedralGeodesicIntegrityChecker(*gg).CheckIntegrity()
 		if len(errs) == 0 {
 			t.Fatalf("Subdivision (%v,%v) created illegal GG: %v", n, m, errs)
 		}
