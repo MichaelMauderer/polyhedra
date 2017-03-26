@@ -2,9 +2,6 @@ package polyhedra
 
 import (
 	"errors"
-	"fmt"
-	"log"
-	"math"
 )
 
 type Geodesic struct {
@@ -41,83 +38,6 @@ func cullDuplicates(edges []Edge) []Edge {
 	return result
 }
 
-func (ig *IcosahedralGeodesic) checkFaces() error {
-	faceNum := len(ig.faces)
-	if faceNum%20 != 0 {
-		return errors.New("Number of faces is not a multiple of 20.")
-	}
-	return nil
-}
-func (ig *IcosahedralGeodesic) checkEdges() error {
-	edgeNum := len(ig.edges)
-	if edgeNum%30 != 0 {
-		return errors.New("Number of faces is not a multiple of 30.")
-	}
-	for _, edge := range ig.edges{
-		if edge.v2 == edge.v1{
-			return errors.New("Edges contain illegal self-loops.")
-		}
-	}
-	return nil
-}
-func (ig *IcosahedralGeodesic) checkVertices() error {
-	vertexNum := len(ig.vertices)
-	if (vertexNum-2)%10 != 0 {
-		return errors.New("Number of vertices does not fulfill V=(T*10+2)")
-	}
-	foundWrongOne := false
-	for _, vertex := range ig.vertices {
-		if vertex == 0 {
-			return errors.New(fmt.Sprintf("Contains illegal zero vertex."))
-		}
-		vD := ig.VertexDegree(vertex)
-		if (vD != 5) && (vD != 6) {
-			log.Printf("Vertex %v in %v has degree %v", vertex, ig, vD)
-			foundWrongOne = true
-		}
-	}
-	if foundWrongOne {
-		return errors.New(fmt.Sprintf("Found invalid number of edges at vertex. Should be 5 or 6"))
-	}
-	return nil
-}
-
-func (ig *IcosahedralGeodesic) checkVertexDistances() error {
-	bp1 := ig.edges[0].v1.Position()
-	bp2 := ig.edges[0].v2.Position()
-	baseLineDistance := bp1.VectorTo(bp2).Length()
-	epsilon := 1000 * math.SmallestNonzeroFloat64
-	for _, edge := range ig.edges{
-		p1 := edge.v1.Position()
-		p2 := edge.v2.Position()
-		dist := p1.VectorTo(p2).Length()
-		delta := math.Abs(dist - baseLineDistance)
-		if  delta > epsilon{
-			return errors.New(fmt.Sprintf("Vertices vary in distance too much: %v", delta))
-		}
-	}
-	return nil
-}
-
-func (gg*IcosahedralGeodesic) CheckIntegrity() error {
-	err := gg.checkFaces()
-	if err != nil {
-		return err
-	}
-	err = gg.checkEdges()
-	if err != nil {
-		return err
-	}
-	err = gg.checkVertices()
-	if err != nil {
-		return err
-	}
-	err = gg.checkVertexDistances()
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 func (gg *Geodesic) Subdivide(m, n int) error {
 
@@ -149,7 +69,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 					vertexPositions[edge.v2],
 				},
 				[]float64{
-					float64(j+1),
+					float64(j + 1),
 					float64(len(nV)),
 				},
 			)

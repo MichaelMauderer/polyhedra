@@ -1,6 +1,9 @@
 package polyhedra
 
-import "math"
+import (
+	"math"
+	"log"
+)
 
 func NewIcosahedron() Polyhedron {
 
@@ -10,7 +13,7 @@ func NewIcosahedron() Polyhedron {
 	c2 := math.Cos(math.Pi / 5.0)
 	s1 := math.Sin(2.0 * math.Pi / 5.0)
 	s2 := math.Sin(4.0 * math.Pi / 5.0)
-	h:= math.Sqrt2
+	h := math.Sqrt(3) / 2
 	vertexPos := []Point3D{
 		// Top Vertex
 		{0, 0, 1},
@@ -23,11 +26,11 @@ func NewIcosahedron() Polyhedron {
 		{-s2, c2, h},
 		{-s1, -c1, h},
 		// Bottom Pentagon
-		{-s2, -c2, -h},
-		{-s1, c1, -h},
-		{0, 1, -h},
-		{s1, c1, -h},
 		{s2, -c2, -h},
+		{s1, c1, -h},
+		{0, 1, -h},
+		{-s1, c1, -h},
+		{-s2, -c2, -h},
 	}
 
 	ico.vertices = make([]Vertex, 12)
@@ -44,8 +47,8 @@ func NewIcosahedron() Polyhedron {
 
 	connectPoles := func(pentagon []Vertex, poleVertex Vertex) {
 		for i, vertex := range pentagon {
-			neigborLIndex := ( 5 + i - 1 ) % 5
-			neighborL := pentagon[neigborLIndex]
+			neighborLIndex := ( 5 + i - 1 ) % 5
+			neighborL := pentagon[neighborLIndex]
 
 			ico.AddEdge(vertex, neighborL)
 			ico.AddEdge(vertex, poleVertex)
@@ -67,9 +70,12 @@ func NewIcosahedron() Polyhedron {
 	}
 
 	//Connect top pentagon
+	log.Printf("Conect top pentagon")
+
 	for i, vertex := range topPentagon {
 		topNeighbor := topPentagon[(5+i-1)%5]
 		bottomNeighbor := bottomPentagon[(5+i-1)%5]
+		log.Printf("Conect Vertex %v (i=%v) and %v (i=%v)", vertex, i, bottomNeighbor, (5+i-1)%5)
 
 		ico.AddEdge(vertex, bottomNeighbor)
 		ico.AddFace([]Vertex{vertex, topNeighbor, bottomNeighbor})

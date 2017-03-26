@@ -1,5 +1,7 @@
 package polyhedra
 
+import "fmt"
+
 type Interface interface{}
 
 type Polyhedron struct {
@@ -64,6 +66,10 @@ func (e Edge) Length() float64 {
 	return Distance(e.v1.Position(), e.v2.Position())
 }
 
+func (e Edge) Center() Point3D {
+	return Centroid3D([]Point3D{e.v1.Position(), e.v2.Position()})
+}
+
 func (e Edge) Contains(v Vertex) bool {
 	return e.v1 == v || e.v2 == v
 }
@@ -94,4 +100,8 @@ func (v Vertex) setPosition(coords Point3D) {
 
 func (v Vertex) Position() Point3D {
 	return vertexPositions[v]
+}
+
+func (v Vertex) String() string {
+	return fmt.Sprintf("Vertex(pos=%v)", v.Position())
 }

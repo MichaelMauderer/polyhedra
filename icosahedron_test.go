@@ -5,6 +5,15 @@ import "testing"
 func TestIcosahedronCreation(t *testing.T) {
 	ico := NewIcosahedron()
 
+	errors := IcosahedriGeodesicIntegrityChecker(IcosahedralGeodesic{Geodesic{ico, 1, 0}}).CheckIntegrity()
+	if len(errors) != 0 {
+		t.Fatalf("Geodesic is in illegal state: %v ", errors)
+	}
+
+	if len(ico.faces) != 20 {
+		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.faces))
+	}
+
 	if len(ico.faces) != 20 {
 		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.faces))
 	}
