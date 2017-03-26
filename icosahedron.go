@@ -9,7 +9,7 @@ func NewIcosahedron() Polyhedron {
 	ico := Polyhedron{}
 
 	c1 := math.Cos(2.0 * math.Pi / 5.0)
-	c2 := math.Cos(math.Pi / 5.0)
+	c2 := math.Cos(1.0 * math.Pi / 5.0)
 	s1 := math.Sin(2.0 * math.Pi / 5.0)
 	s2 := math.Sin(4.0 * math.Pi / 5.0)
 	h := math.Sqrt(3) / 2

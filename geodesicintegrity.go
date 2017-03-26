@@ -81,21 +81,33 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkDistinctVertexNeighbors() er
 }
 
 func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
-	bp1 := gic.edges[0].v1.Position()
-	bp2 := gic.edges[0].v2.Position()
-	baseLineDistance := bp1.VectorTo(bp2).Length()
-	epsilon := baseLineDistance * 0.1
+	baseLineDistance := gic.edges[0].Length()
+	epsilon := 0.2
 	for _, edge := range gic.edges {
-		p1 := edge.v1.Position()
-		p2 := edge.v2.Position()
-		dist := p1.VectorTo(p2).Length()
+		dist := edge.Length()
 		delta := math.Abs(dist - baseLineDistance)
 		if delta > epsilon {
-			return errors.New(fmt.Sprintf("Vertices %v and %v vary in distance too much: %v with a baseline of %v", p1, p2, delta, baseLineDistance))
+			return errors.New(fmt.Sprintf("Edge %v deviates in length too much: %v with a baseline of %v", edge, delta, baseLineDistance))
 		}
 	}
 	return nil
 }
+
+func (gic IcosahedralGeodesicIntegrityChecker) checkCenter() error {
+	vertices := gic.vertices
+	positions := make([]Point3D, len(vertices))
+	for i := range vertices{
+		positions[i] = vertices[i].Position()
+	}
+	center := Centroid3D(positions)
+	epsilon := 0.000001
+	if Distance(center, Point3D{0,0,0}) > epsilon{
+		return errors.New(fmt.Sprintf("Center has mvoed from origin to %v", center))
+
+	}
+	return nil
+}
+
 
 func (gic IcosahedralGeodesicIntegrityChecker) CheckIntegrity() []error {
 
@@ -106,6 +118,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) CheckIntegrity() []error {
 		gic.checkVertexNum,
 		gic.checkVertexDistances,
 		gic.checkDistinctVertexNeighbors,
+		gic.checkCenter,
 	}
 	errs := make([]error, 0, len(checks))
 	for _, check := range checks {
