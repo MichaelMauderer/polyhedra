@@ -70,12 +70,9 @@ func NewIcosahedron() Polyhedron {
 	}
 
 	//Connect top pentagon
-	log.Printf("Conect top pentagon")
-
 	for i, vertex := range topPentagon {
 		topNeighbor := topPentagon[(5+i-1)%5]
 		bottomNeighbor := bottomPentagon[(5+i-1)%5]
-		log.Printf("Conect Vertex %v (i=%v) and %v (i=%v)", vertex, i, bottomNeighbor, (5+i-1)%5)
 
 		ico.AddEdge(vertex, bottomNeighbor)
 		ico.AddFace([]Vertex{vertex, topNeighbor, bottomNeighbor})
