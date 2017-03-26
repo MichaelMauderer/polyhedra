@@ -2,7 +2,6 @@ package polyhedra
 
 import (
 	"math"
-	"log"
 )
 
 func NewIcosahedron() Polyhedron {

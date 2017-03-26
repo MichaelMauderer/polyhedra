@@ -65,13 +65,13 @@ func PlaneFromPoints(p1, p2, p3 Point3D) Plane3D {
 func (pos Point3D) Spherical() SphericalCoordinate {
 	x, y, z := pos.X, pos.Y, pos.Z
 	r := math.Sqrt(x*x + y*y + z*z)
-	rho := math.Atan2(y, x)
-	theta := math.Acos(z / r)
-	return SphericalCoordinate{rho, theta, r}
+	theta := math.Atan2(y, x)
+	phi := math.Acos(z / r)
+	return SphericalCoordinate{r, theta, phi}
 }
 
 type SphericalCoordinate struct {
-	T, Theta, Phi float64
+	R, Theta, Phi float64
 }
 
 type UnitSphereCoordinates struct {
@@ -137,5 +137,5 @@ func (v counterClockwise3D) Less(i, j int) bool {
 	v2 := v.center.VectorTo(v.v[j])
 	vc := v1.Cross(v2)
 	n := v.normal.Dot(vc)
-	return  n > 0
+	return n < 0
 }
