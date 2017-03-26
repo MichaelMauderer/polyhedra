@@ -39,6 +39,19 @@ func (p *Polyhedron) VertexDegree(vertex Vertex) int {
 	return degree
 }
 
+func (p *Polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
+	result := make([]Vertex, 0)
+	for _, edge := range p.edges {
+		if vertex == edge.v1 {
+			result = append(result, edge.v2)
+		}
+		if vertex == edge.v2 {
+			result = append(result, edge.v1)
+		}
+	}
+	return result
+}
+
 type Face struct {
 	edges []Edge
 }
@@ -68,17 +81,17 @@ func (e Edge) Reversed() Edge {
 type Vertex uint
 
 var vertexId Vertex = 0
-var vertexPositions = make(map[Vertex]CartesianCoordinate)
+var vertexPositions = make(map[Vertex]Point3D)
 
 func NewVertex() Vertex {
 	vertexId++
 	return vertexId
 }
 
-func (v Vertex) setPosition(coords CartesianCoordinate) {
+func (v Vertex) setPosition(coords Point3D) {
 	vertexPositions[v] = coords
 }
 
-func (v Vertex) Position() CartesianCoordinate {
+func (v Vertex) Position() Point3D {
 	return vertexPositions[v]
 }

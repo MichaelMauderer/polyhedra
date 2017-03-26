@@ -1,9 +1,80 @@
 package polyhedra
 
-import "errors"
+import (
+	"errors"
+	"math"
+	"sort"
+)
 
-type Polygon struct {
-	edges []Edge
+type Polygon interface {
+}
+
+type Point2D struct {
+	X, Y float64
+}
+
+func Centroid2D(points []Point2D) Point2D {
+	x, y := 0.0, 0.0
+	for _, p := range points {
+		x += p.X
+		y += p.Y
+	}
+	x /= float64(len(points))
+	y /= float64(len(points))
+
+	return Point2D{x, y}
+}
+
+func CounterClockwise2D(v []Point2D) sort.Interface {
+	cc := counterClockwise{}
+	cc.v = v
+	cc.center = Centroid2D(v)
+	return cc
+}
+
+type counterClockwise struct {
+	v      []Point2D
+	center Point2D
+}
+
+func (v counterClockwise) Len() int      { return len(v.v) }
+func (v counterClockwise) Swap(i, j int) { v.v[i], v.v[j] = v.v[j], v.v[i] }
+func (v counterClockwise) Less(i, j int) bool {
+	return ccLess(v.v[i], v.v[i], v.center)
+}
+
+func ccLess(a, b, center Point2D) bool {
+
+	// http://stackoverflow.com/a/6989383/1175813
+	if a.X-center.X >= 0 && b.X-center.X < 0 {
+		return true
+	}
+	if a.X-center.X < 0 && b.X-center.X >= 0 {
+		return false
+	}
+	if a.X-center.X == 0 && b.X-center.X == 0 {
+		if a.X-center.X >= 0 || b.X-center.X >= 0 {
+			return a.X > b.X
+		}
+		return b.X > a.X
+	}
+
+	// compute the cross product of vectors (center -> a) X (center -> b)
+	det := (a.X-center.X)*(b.X-center.X) - (b.X-center.X)*(a.X-center.X)
+	if det < 0 {
+
+		return true
+	}
+
+	if det > 0 {
+		return false
+	}
+
+	// points a and b are on the same line from the center
+	// check which point is closer to the center
+	d1 := (a.X-center.X)*(a.X-center.X) + (a.Y-center.Y)*(a.Y-center.Y)
+	d2 := (b.X-center.X)*(b.X-center.X) + (b.Y-center.Y)*(b.Y-center.Y)
+	return d1 > d2
 }
 
 func SubdivideTriangle(triangle Triangle, n, m int) ([]Triangle, error) {
@@ -67,7 +138,13 @@ type Pentagon struct {
 	vertices [5]Vertex
 }
 
-type Hexagon struct {
-	edges    [6]Edge
-	vertices [6]Vertex
+type RegularHexagon struct {
+}
+
+func (rh RegularHexagon) EdgeLength() float64 {
+	return math.Sqrt(3) * 2.0 / 3.0
+}
+
+func NewUnitHexagon() Polygon {
+	return RegularHexagon{}
 }

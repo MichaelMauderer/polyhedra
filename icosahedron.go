@@ -6,23 +6,28 @@ func NewIcosahedron() Polyhedron {
 
 	ico := Polyhedron{}
 
-	vertexPos := []CartesianCoordinate{
+	c1 := math.Cos(2.0 * math.Pi / 5.0)
+	c2 := math.Cos(math.Pi / 5.0)
+	s1 := math.Sin(2.0 * math.Pi / 5.0)
+	s2 := math.Sin(4.0 * math.Pi / 5.0)
+	h:= math.Sqrt2
+	vertexPos := []Point3D{
 		// Top Vertex
 		{0, 0, 1},
 		// Bottom Vertex
 		{0, 0, -1},
 		// Top Pentagon
-		{0, -1, math.Phi},
-		{1, math.Phi, math.Phi},
-		{math.Phi, 1, math.Phi},
-		{-math.Phi, 1, math.Phi},
-		{-1, 0, math.Phi},
+		{0, -1, h},
+		{s1, -c1, h},
+		{s2, c2, h},
+		{-s2, c2, h},
+		{-s1, -c1, h},
 		// Bottom Pentagon
-		{0, -1, -math.Phi},
-		{math.Phi, math.Phi, -math.Phi},
-		{math.Phi, 1, -math.Phi},
-		{-math.Phi, math.Phi, -math.Phi},
-		{-math.Phi, -1, -math.Phi},
+		{-s2, -c2, -h},
+		{-s1, c1, -h},
+		{0, 1, -h},
+		{s1, c1, -h},
+		{s2, -c2, -h},
 	}
 
 	ico.vertices = make([]Vertex, 12)
@@ -39,7 +44,7 @@ func NewIcosahedron() Polyhedron {
 
 	connectPoles := func(pentagon []Vertex, poleVertex Vertex) {
 		for i, vertex := range pentagon {
-			neigborLIndex := (5 + i - 1 ) % 5
+			neigborLIndex := ( 5 + i - 1 ) % 5
 			neighborL := pentagon[neigborLIndex]
 
 			ico.AddEdge(vertex, neighborL)
