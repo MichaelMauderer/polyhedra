@@ -62,6 +62,16 @@ type Face struct {
 	Loop []Vertex
 }
 
+func (f Face) Edges() []Edge{
+	edges := make([]Edge, len(f.Loop))
+	for i := range f.Loop{
+		v1 := f.Loop[i]
+		v2 := f.Loop[(i+1)%len(f.Loop)]
+		edges[i] = Edge{v1, v2}
+	}
+	return edges
+}
+
 type Edge struct {
 	v1, v2 Vertex
 }

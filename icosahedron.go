@@ -15,9 +15,9 @@ func NewIcosahedron() Polyhedron {
 	h := math.Sqrt(3) / 2
 	vertexPos := []Point3D{
 		// Top Vertex
-		{0, 0, 1},
+		{0, 0, math.Sqrt2 * h},
 		// Bottom Vertex
-		{0, 0, -1},
+		{0, 0, -math.Sqrt2 * h},
 		// Top Pentagon
 		{0, -1, h},
 		{s1, -c1, h},

@@ -13,6 +13,10 @@ type Point2D struct {
 	X, Y float64
 }
 
+type Vector2D struct {
+	X, Y float64
+}
+
 func Centroid2D(points []Point2D) Point2D {
 	x, y := 0.0, 0.0
 	for _, p := range points {

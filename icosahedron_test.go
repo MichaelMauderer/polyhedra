@@ -1,9 +1,22 @@
 package polyhedra
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIcosahedronCreation(t *testing.T) {
 	ico := NewIcosahedron()
+
+	for _, face := range ico.faces{
+		for i := range face.Loop{
+			p1 := face.Loop[i].Position()
+			p2 := face.Loop[(i+1)%len(face.Loop)].Position()
+			t.Logf("vec4(%v,%v,%v,1.0),", p1.X, p1.Y, p1.Z)
+			t.Logf("vec4(%v,%v,%v,1.0),", p2.X, p2.Y, p2.Z)
+		}
+
+	}
+
 
 	errors := IcosahedralGeodesicIntegrityChecker(IcosahedralGeodesic{Geodesic{ico, 1, 0}}).CheckIntegrity()
 	if len(errors) != 0 {
