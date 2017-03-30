@@ -7,7 +7,7 @@ type GoldbergPolyhedron struct {
 	m, n int
 }
 
-func GedoesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
+func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 
 	// For each edge create a new vertex
 	vertexMap := make(map[*Face]Vertex)
@@ -58,6 +58,6 @@ func GedoesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 func NewIcosahedralGoldbergPolyhedron(m int, n int) (*GoldbergPolyhedron, error) {
 	baseGeodesic := NewIcosahedralGeodesic()
 	baseGeodesic.Subdivide(m, n)
-	result := GedoesicToGoldberg(baseGeodesic)
+	result := GeodesicToGoldberg(baseGeodesic)
 	return result, nil
 }

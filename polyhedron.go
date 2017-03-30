@@ -8,11 +8,12 @@ type Polyhedron interface{
 	Faces() []Face
 
 	VertexDegree(vertex Vertex) int
+	AdjacentVertices(vertex Vertex) []Vertex
 
 	VertexAdjacentFaces(v Vertex) []*Face
 	EdgeAdjacentFaces(e Edge) [2]*Face
-	FaceEdgeAdjacentFaces(f Face) []*Face
-	FaceVertexAdjacentFaces(f Face) []*Face
+	FaceEdgeAdjacentFaces(f *Face) []*Face
+	FaceVertexAdjacentFaces(f *Face) []*Face
 }
 
 type polyhedron struct {
@@ -82,29 +83,29 @@ func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]*Face {
 	return resultFaces
 }
 
-func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []*Face {
+func (p *polyhedron) FaceEdgeAdjacentFaces(f *Face) []*Face {
 	resultFaces := make([]*Face, 0)
-	for _, face := range p.faces {
-		for _, e  := range face.Edges(){
-			for _, f := range p.EdgeAdjacentFaces(e){
-				resultFaces = append(resultFaces, f)
+		for _, e  := range f.Edges(){
+			for _, ef := range p.EdgeAdjacentFaces(e){
+				if f != ef{
+					resultFaces = append(resultFaces, f)
+				}
 			}
 
 
 		}
-	}
-	return resultFaces
+return resultFaces
 }
 
-func (p *polyhedron) FaceVertexAdjacentFaces(f Face) []*Face {
+func (p *polyhedron) FaceVertexAdjacentFaces(f *Face) []*Face {
 	resultFaces := make([]*Face, 0)
 	for _, face := range p.faces {
 		for _, v  := range face.Loop{
-			for _, f := range p.VertexAdjacentFaces(v){
-				resultFaces = append(resultFaces, f)
+			for _, vf := range p.VertexAdjacentFaces(v){
+				if f != vf{
+					resultFaces = append(resultFaces, f)
+				}
 			}
-
-
 		}
 	}
 	return resultFaces
