@@ -5,19 +5,16 @@ import (
 )
 
 type Geodesic struct {
-	Polyhedron
+	polyhedron
 	m, n int
 }
 
-type IcosahedralGeodesic struct {
-	Geodesic
-}
+type IcosahedralGeodesic Geodesic
 
-func NewIcosahedralGeodesic() *IcosahedralGeodesic {
+func NewIcosahedralGeodesic() *Geodesic {
 	ico := NewIcosahedron()
 	geo := Geodesic{ico, 1, 0}
-	icoGeo := IcosahedralGeodesic{geo}
-	return &icoGeo
+	return &geo
 }
 
 func cullDuplicates(edges []Edge) []Edge {

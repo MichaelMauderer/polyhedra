@@ -18,7 +18,7 @@ type Plane3D struct {
 }
 
 func (v Vector3D) Dot(v2 Vector3D) float64 {
-	return v.X*v.X + v.Y + v.Y + v.Z*v.Z
+	return v.X*v2.X + v.Y*v2.Y + v.Z*v2.Z
 }
 
 func (v Vector3D) Cross(v2 Vector3D) Vector3D {
@@ -34,7 +34,7 @@ func (v Vector3D) Length() float64 {
 }
 
 func (v Vector3D) Normalised() Vector3D {
-	return v.Scale(v.Length())
+	return v.Scale(1 / v.Length())
 }
 
 func (v Vector3D) Scale(s float64) Vector3D {
@@ -138,4 +138,12 @@ func (v counterClockwise3D) Less(i, j int) bool {
 	vc := v1.Cross(v2)
 	n := v.normal.Dot(vc)
 	return n < 0
+}
+
+func IsCCW(a, b Point3D, center Point3D, normal Vector3D) bool {
+	v1 := center.VectorTo(a)
+	v2 := center.VectorTo(b)
+	vc := v1.Cross(v2)
+	n := normal.Dot(vc)
+	return n > 0
 }

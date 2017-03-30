@@ -2,31 +2,42 @@ package polyhedra
 
 import "fmt"
 
-type Interface interface{}
+type Polyhedron interface{
+	Vertices() []Vertex
+	Edges() []Edge
+	Faces() []Face
 
-type Polyhedron struct {
+	VertexDegree(vertex Vertex) int
+
+	VertexAdjacentFaces(v Vertex) []*Face
+	EdgeAdjacentFaces(e Edge) [2]*Face
+	FaceEdgeAdjacentFaces(f Face) []*Face
+	FaceVertexAdjacentFaces(f Face) []*Face
+}
+
+type polyhedron struct {
 	faces    []Face
 	edges    []Edge
 	vertices []Vertex
 }
 
-func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) {
+func (p *polyhedron) AddEdge(v1 Vertex, v2 Vertex) {
 	p.edges = append(p.edges, Edge{v1, v2})
 }
 
-func (p *Polyhedron) Vertices() []Vertex {
+func (p *polyhedron) Vertices() []Vertex {
 	return p.vertices
 }
 
-func (p *Polyhedron) Edges() []Edge {
+func (p *polyhedron) Edges() []Edge {
 	return p.edges
 }
 
-func (p *Polyhedron) Faces() []Face {
+func (p *polyhedron) Faces() []Face {
 	return p.faces
 }
 
-func (p *Polyhedron) AddFace(vertices []Vertex) {
+func (p *polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)
@@ -35,7 +46,7 @@ func (p *Polyhedron) AddFace(vertices []Vertex) {
 	p.faces = append(p.faces, Face{vertices})
 }
 
-func (p *Polyhedron) VertexDegree(vertex Vertex) int {
+func (p *polyhedron) VertexDegree(vertex Vertex) int {
 	degree := 0
 	for _, edge := range p.edges {
 		if vertex == edge.v1 || vertex == edge.v2 {
@@ -45,7 +56,61 @@ func (p *Polyhedron) VertexDegree(vertex Vertex) int {
 	return degree
 }
 
-func (p *Polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
+func (p *polyhedron) VertexAdjacentFaces(v Vertex) []*Face {
+	resultFaces := make([]*Face, 0)
+	for i, face := range p.faces {
+		for _, vf  := range face.Loop{
+			if v == vf{
+				resultFaces = append(resultFaces, &p.faces[i])
+			}
+		}
+	}
+	return resultFaces
+}
+
+func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]*Face {
+	var resultFaces [2]*Face
+	iR := 0
+	for i, face := range p.faces {
+		for _, ve  := range face.Edges(){
+			if e.Equal(ve){
+				resultFaces[iR] =&p.faces[i]
+				iR +=1
+			}
+		}
+	}
+	return resultFaces
+}
+
+func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []*Face {
+	resultFaces := make([]*Face, 0)
+	for _, face := range p.faces {
+		for _, e  := range face.Edges(){
+			for _, f := range p.EdgeAdjacentFaces(e){
+				resultFaces = append(resultFaces, f)
+			}
+
+
+		}
+	}
+	return resultFaces
+}
+
+func (p *polyhedron) FaceVertexAdjacentFaces(f Face) []*Face {
+	resultFaces := make([]*Face, 0)
+	for _, face := range p.faces {
+		for _, v  := range face.Loop{
+			for _, f := range p.VertexAdjacentFaces(v){
+				resultFaces = append(resultFaces, f)
+			}
+
+
+		}
+	}
+	return resultFaces
+}
+
+func (p *polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
 	result := make([]Vertex, 0)
 	for _, edge := range p.edges {
 		if vertex == edge.v1 {
@@ -70,6 +135,18 @@ func (f Face) Edges() []Edge{
 		edges[i] = Edge{v1, v2}
 	}
 	return edges
+}
+
+func vertexCentroid(vertices []Vertex) Point3D{
+	positions := make([]Point3D, len(vertices))
+	for i, v := range vertices{
+		positions[i] = v.Position()
+	}
+	return Centroid3D(positions)
+}
+
+func (f Face) Center() Point3D{
+	return vertexCentroid(f.Loop)
 }
 
 type Edge struct {
@@ -117,5 +194,32 @@ func (v Vertex) Position() Point3D {
 }
 
 func (v Vertex) String() string {
-	return fmt.Sprintf("Vertex(pos=%v)", v.Position())
+	return fmt.Sprintf("Vertex(id=%v, pos=%v)", uint(v), v.Position())
+}
+
+
+
+func SortedClockwise(vertices []Vertex) []Vertex{
+ 	//Insertionsort based on clockwiseness
+	c := vertexCentroid(vertices)
+	n := Point3D{0,0,0}.VectorTo(c).Normalised()
+	sorted := make([]Vertex, 1)
+	sorted[0] = vertices[0]
+	for _, v := range vertices[1:]{
+		i := 1
+		for ; ; i++{
+			if i == len(sorted){
+				break
+			}
+			vo := sorted[i]
+			if !IsCCW(v.Position(), vo.Position(), c, n){
+				break
+			}
+		}
+		//insert at i
+		sorted = append(sorted, 0)
+		copy(sorted[i+1:], sorted[i:])
+		sorted[i] = v
+	}
+	return sorted
 }

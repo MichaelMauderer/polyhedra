@@ -18,7 +18,7 @@ func TestIcosahedronCreation(t *testing.T) {
 	}
 
 
-	errors := IcosahedralGeodesicIntegrityChecker(IcosahedralGeodesic{Geodesic{ico, 1, 0}}).CheckIntegrity()
+	errors := IcosahedralGeodesicIntegrityChecker(IcosahedralGeodesic(Geodesic{ico, 1, 0})).CheckIntegrity()
 	if len(errors) != 0 {
 		t.Fatalf("Geodesic is in illegal state: %v ", errors)
 	}

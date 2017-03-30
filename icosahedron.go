@@ -4,9 +4,9 @@ import (
 	"math"
 )
 
-func NewIcosahedron() Polyhedron {
+func NewIcosahedron() polyhedron {
 
-	ico := Polyhedron{}
+	ico := polyhedron{}
 
 	c1 := math.Cos(2.0 * math.Pi / 5.0)
 	c2 := math.Cos(1.0 * math.Pi / 5.0)

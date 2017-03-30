@@ -1,70 +1,63 @@
 package polyhedra
 
-import (
-	"github.com/MichaelMauderer/polyhedra"
-	"errors"
-)
+import ()
 
+type GoldbergPolyhedron struct {
+	polyhedron
+	m, n int
+}
 
-func GedoesicToGoldber(g *Geodesic) polyhedra.Interface{
+func GedoesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 
 	// For each edge create a new vertex
-	verticeMap := make(map[Edge]Vertex)
-	for _, e := range g.edges{
+	vertexMap := make(map[*Face]Vertex)
+	for i, _ := range g.faces {
+		f := &g.faces[i]
 		v := NewVertex()
-		verticeMap[e] = v
-		v.setPosition(e.Center())
+		vertexMap[f] = v
+		v.setPosition(f.Center())
 	}
 
-	faceMap := make(map[Vertex]Face)
-	for _, v := range g.vertices{
-		nv := g.AdjacentVertices(v)
-		// TODO Sort clockwise?
-		faceMap[v] = Face{nv}
-	}
-
-	edgeSet := make(map[Edge]bool)
-	for _, f := range(faceMap){
-
-		for _, e := range f.Edges(){
-			hasE := edgeSet[e]
-			hasRE := edgeSet[e.Reversed()]
-			if !(hasE && hasRE){
-				edgeSet[e] = true
-			}
+	// Turn adjacent vertices into faces into edges
+	newFaces := make([]Face, 0)
+	for _, v := range g.vertices {
+		af := g.VertexAdjacentFaces(v)
+		loop := make([]Vertex, len(af))
+		for i, f := range af {
+			loop[i] = vertexMap[f]
 		}
+		newFace := Face{SortedClockwise(loop)}
+		newFaces = append(newFaces, newFace)
 	}
 
-	poly := Polyhedron{}
-
-	poly.faces = make([]Face, 0, len(faceMap))
-	for _, f := range faceMap{
-		poly.faces = append(poly.faces, f)
+	newEdges := make([]Edge, 0)
+	for _, e := range g.edges {
+		fs := g.EdgeAdjacentFaces(e)
+		v1 := vertexMap[fs[0]]
+		v2 := vertexMap[fs[1]]
+		newEdges = append(newEdges, Edge{v1, v2})
 	}
 
-	poly.edges = make([]Edge, 0, len(edgeSet))
-	for e, _:= range edgeSet{
-		poly.edges = append(poly.edges, e)
-	}
+	poly := GoldbergPolyhedron{}
 
-	poly.vertices = make([]Vertex, 0, len(verticeMap))
-	for _, v:= range verticeMap{
+	poly.faces = newFaces
+
+	poly.edges = newEdges
+
+	poly.vertices = make([]Vertex, 0, len(vertexMap))
+	for _, v := range vertexMap {
 		poly.vertices = append(poly.vertices, v)
 	}
+
+	poly.m = g.m
+	poly.n = g.n
 
 	return &poly
 }
 
-func NewGoldberPolyhedra(m int, n int) (polyhedra.Interface, error) {
-	if n != m {
-		return nil, errors.New("Class III not supported.")
-	}
-	if m != 0 {
-		return nil, errors.New("Class II not supported.")
-	}
-
+func NewIcosahedralGoldbergPolyhedron(m int, n int) (*GoldbergPolyhedron, error) {
 	baseGeodesic := NewIcosahedralGeodesic()
-	baseGeodesic.Subdivide(m ,n)
-
-	return nil, nil
+	baseGeodesic.Subdivide(m, n)
+	result := GedoesicToGoldberg(baseGeodesic)
+	return result, nil
 }

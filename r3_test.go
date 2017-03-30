@@ -102,3 +102,41 @@ func TestSphericalConversion(t *testing.T) {
 	}
 	assertSphericalClose(expected, s, t)
 }
+
+func assertIsCCW(p1, p2, c Point3D, n Vector3D, t *testing.T ){
+	if !IsCCW(p1, p2, c, n){
+		t.Errorf("Expetced %v to be counter clock wise of %v", p1, p2)
+	}
+}
+
+func assertIsNotCCW(p1, p2, c Point3D, n Vector3D, t *testing.T ){
+	if IsCCW(p1, p2, c, n){
+		t.Errorf("Expetced %v not to be counter clock wise of %v", p1, p2)
+	}
+}
+
+func TestIsCCW(t *testing.T) {
+	cwSortedPoints := []Point3D{
+		{0, 0, 1},
+		{-1, 0, 2},
+		{-1, 1, 3},
+		{2, 2, 4},
+	}
+	normal := Vector3D{0, 0, 1}
+	center := Centroid3D(cwSortedPoints)
+
+	cwPairs := [][2]int{
+		{1,0},
+		{2,1},
+		{3,2},
+		{2,0},
+		{1,3},
+	}
+
+	for _, ab := range cwPairs{
+		i, j := ab[0], ab[1]
+		assertIsCCW(cwSortedPoints[i], cwSortedPoints[j], center, normal, t)
+		assertIsNotCCW(cwSortedPoints[j], cwSortedPoints[i], center, normal, t)
+	}
+
+}
