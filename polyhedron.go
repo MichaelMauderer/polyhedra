@@ -5,7 +5,7 @@ import "fmt"
 type Polyhedron interface{
 	Vertices() []Vertex
 	Edges() []Edge
-	Faces() []Face
+	Faces() []*Face
 
 	VertexDegree(vertex Vertex) int
 	AdjacentVertices(vertex Vertex) []Vertex
@@ -34,8 +34,12 @@ func (p *polyhedron) Edges() []Edge {
 	return p.edges
 }
 
-func (p *polyhedron) Faces() []Face {
-	return p.faces
+func (p *polyhedron) Faces() []*Face {
+	result := make([]*Face, len(p.faces))
+	for i:= range (p.faces){
+		result[i] = &p.faces[i]
+	}
+	return result
 }
 
 func (p *polyhedron) AddFace(vertices []Vertex) {
@@ -72,7 +76,7 @@ func (p *polyhedron) VertexAdjacentFaces(v Vertex) []*Face {
 func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]*Face {
 	var resultFaces [2]*Face
 	iR := 0
-	for i, face := range p.faces {
+	for i, face := range p.Faces() {
 		for _, ve  := range face.Edges(){
 			if e.Equal(ve){
 				resultFaces[iR] =&p.faces[i]
@@ -88,7 +92,7 @@ func (p *polyhedron) FaceEdgeAdjacentFaces(f *Face) []*Face {
 		for _, e  := range f.Edges(){
 			for _, ef := range p.EdgeAdjacentFaces(e){
 				if f != ef{
-					resultFaces = append(resultFaces, f)
+					resultFaces = append(resultFaces, ef)
 				}
 			}
 
@@ -207,7 +211,7 @@ func SortedClockwise(vertices []Vertex) []Vertex{
 	sorted := make([]Vertex, 1)
 	sorted[0] = vertices[0]
 	for _, v := range vertices[1:]{
-		i := 1
+		i := 0
 		for ; ; i++{
 			if i == len(sorted){
 				break

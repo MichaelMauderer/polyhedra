@@ -3,7 +3,6 @@ package polyhedra
 import (
 	"errors"
 	"math"
-	"sort"
 )
 
 type Polygon interface {
@@ -27,25 +26,6 @@ func Centroid2D(points []Point2D) Point2D {
 	y /= float64(len(points))
 
 	return Point2D{x, y}
-}
-
-func CounterClockwise2D(v []Point2D) sort.Interface {
-	cc := counterClockwise{}
-	cc.v = v
-	cc.center = Centroid2D(v)
-	return cc
-}
-
-type counterClockwise struct {
-	v      []Point2D
-	center Point2D
-
-}
-
-func (v counterClockwise) Len() int      { return len(v.v) }
-func (v counterClockwise) Swap(i, j int) { v.v[i], v.v[j] = v.v[j], v.v[i] }
-func (v counterClockwise) Less(i, j int) bool {
-	return ccLess(v.v[i], v.v[j], v.center)
 }
 
 func ccLess(a, b, center Point2D) bool {
