@@ -2,6 +2,7 @@ package polyhedra
 
 import (
 	"math"
+	"github.com/MichaelMauderer/geometry/r3"
 )
 
 func NewIcosahedron() polyhedron {
@@ -13,7 +14,7 @@ func NewIcosahedron() polyhedron {
 	s1 := math.Sin(2.0 * math.Pi / 5.0)
 	s2 := math.Sin(4.0 * math.Pi / 5.0)
 	h := math.Sqrt(3) / 2
-	vertexPos := []Point3D{
+	vertexPos := []r3.Point3D{
 		// Top Vertex
 		{0, 0, math.Sqrt2 * h},
 		// Bottom Vertex

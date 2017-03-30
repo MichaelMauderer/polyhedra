@@ -3,6 +3,7 @@ package polyhedra
 import (
 	"testing"
 	"math/rand"
+	"github.com/MichaelMauderer/geometry/r3"
 )
 
 func TestEdgeReversal(t *testing.T) {
@@ -32,7 +33,7 @@ func shuffledVertices(a []Vertex) []Vertex {
 
 
 func TestSortedClockwise(t *testing.T) {
-	sortedPositions := []Point3D{
+	sortedPositions := []r3.Point3D{
 		{2, 2, 1},
 		{2, 1, 2},
 		{1, 1, 3},

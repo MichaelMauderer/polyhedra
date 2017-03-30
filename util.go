@@ -1,4 +1,4 @@
-package polyhedra
+package geometry
 
 import "math"
 

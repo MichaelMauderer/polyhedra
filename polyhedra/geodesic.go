@@ -2,6 +2,7 @@ package polyhedra
 
 import (
 	"errors"
+	"github.com/MichaelMauderer/geometry/r3"
 )
 
 type Geodesic struct {
@@ -60,8 +61,8 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
 			nV[j] = NewVertex()
-			c := WeightedCentroid(
-				[]Point3D{
+			c := r3.WeightedCentroid(
+				[]r3.Point3D{
 					vertexPositions[edge.v1],
 					vertexPositions[edge.v2],
 				},

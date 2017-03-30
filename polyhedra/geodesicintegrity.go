@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"github.com/MichaelMauderer/geometry/r3"
 )
 
 type IcosahedralGeodesicIntegrityChecker IcosahedralGeodesic
@@ -26,7 +27,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		if edge.v2 == edge.v1 {
 			return errors.New("Edges contain illegal self-loops.")
 		}
-		zero := Point3D{0.0, 0.0, 0.0}
+		zero := r3.Point3D{0.0, 0.0, 0.0}
 		if edge.Center() == zero {
 			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, edge.v1.String(), edge.v2.String()))
 		}
@@ -95,13 +96,13 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 
 func (gic IcosahedralGeodesicIntegrityChecker) checkCenter() error {
 	vertices := gic.vertices
-	positions := make([]Point3D, len(vertices))
+	positions := make([]r3.Point3D, len(vertices))
 	for i := range vertices{
 		positions[i] = vertices[i].Position()
 	}
-	center := Centroid3D(positions)
+	center := r3.Centroid3D(positions)
 	epsilon := 0.000001
-	if Distance(center, Point3D{0,0,0}) > epsilon{
+	if r3.Distance(center, r3.Point3D{0,0,0}) > epsilon{
 		return errors.New(fmt.Sprintf("Center has mvoed from origin to %v", center))
 
 	}

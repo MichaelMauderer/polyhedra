@@ -1,6 +1,9 @@
 package polyhedra
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/MichaelMauderer/geometry/r3"
+)
 
 type Polyhedron interface{
 	Vertices() []Vertex
@@ -142,15 +145,15 @@ func (f Face) Edges() []Edge{
 	return edges
 }
 
-func vertexCentroid(vertices []Vertex) Point3D{
-	positions := make([]Point3D, len(vertices))
+func vertexCentroid(vertices []Vertex) r3.Point3D{
+	positions := make([]r3.Point3D, len(vertices))
 	for i, v := range vertices{
 		positions[i] = v.Position()
 	}
-	return Centroid3D(positions)
+	return r3.Centroid3D(positions)
 }
 
-func (f Face) Center() Point3D{
+func (f Face) Center() r3.Point3D{
 	return vertexCentroid(f.Loop)
 }
 
@@ -159,11 +162,11 @@ type Edge struct {
 }
 
 func (e Edge) Length() float64 {
-	return Distance(e.v1.Position(), e.v2.Position())
+	return r3.Distance(e.v1.Position(), e.v2.Position())
 }
 
-func (e Edge) Center() Point3D {
-	return Centroid3D([]Point3D{e.v1.Position(), e.v2.Position()})
+func (e Edge) Center() r3.Point3D {
+	return r3.Centroid3D([]r3.Point3D{e.v1.Position(), e.v2.Position()})
 }
 
 func (e Edge) Contains(v Vertex) bool {
@@ -183,18 +186,18 @@ func (e Edge) Reversed() Edge {
 type Vertex uint
 
 var vertexId Vertex = 0
-var vertexPositions = make(map[Vertex]Point3D)
+var vertexPositions = make(map[Vertex]r3.Point3D)
 
 func NewVertex() Vertex {
 	vertexId++
 	return vertexId
 }
 
-func (v Vertex) setPosition(coords Point3D) {
+func (v Vertex) setPosition(coords r3.Point3D) {
 	vertexPositions[v] = coords
 }
 
-func (v Vertex) Position() Point3D {
+func (v Vertex) Position() r3.Point3D {
 	return vertexPositions[v]
 }
 
@@ -207,7 +210,7 @@ func (v Vertex) String() string {
 func SortedClockwise(vertices []Vertex) []Vertex{
  	//Insertionsort based on clockwiseness
 	c := vertexCentroid(vertices)
-	n := Point3D{0,0,0}.VectorTo(c).Normalised()
+	n := r3.Point3D{0,0,0}.VectorTo(c).Normalised()
 	sorted := make([]Vertex, 1)
 	sorted[0] = vertices[0]
 	for _, v := range vertices[1:]{
@@ -217,7 +220,7 @@ func SortedClockwise(vertices []Vertex) []Vertex{
 				break
 			}
 			vo := sorted[i]
-			if !IsCCW(v.Position(), vo.Position(), c, n){
+			if !r3.IsCCW(v.Position(), vo.Position(), c, n){
 				break
 			}
 		}

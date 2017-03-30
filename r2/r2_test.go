@@ -1,4 +1,4 @@
-package polyhedra
+package r2
 
 import "testing"
 

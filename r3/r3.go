@@ -1,4 +1,4 @@
-package polyhedra
+package r3
 
 import (
 	"math"
