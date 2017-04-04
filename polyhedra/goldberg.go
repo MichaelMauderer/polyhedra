@@ -2,7 +2,7 @@ package polyhedra
 
 
 type GoldbergPolyhedron struct {
-	polyhedron
+	Polyhedron
 	m, n int
 }
 
@@ -30,23 +30,21 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 	}
 
 	newEdges := make([]Edge, 0)
-	for _, e := range g.edges {
+	for _, e := range g.Edges() {
 		fs := g.EdgeAdjacentFaces(e)
 		v1 := vertexMap[fs[0]]
 		v2 := vertexMap[fs[1]]
 		newEdges = append(newEdges, edge{v1, v2})
 	}
 
-	poly := GoldbergPolyhedron{}
 
-	poly.faces = newFaces
-
-	poly.edges = newEdges
-
-	poly.vertices = make([]Vertex, 0, len(vertexMap))
+	newVertices := make([]Vertex, 0, len(vertexMap))
 	for _, v := range vertexMap {
-		poly.vertices = append(poly.vertices, v)
+		newVertices = append(newVertices, v)
 	}
+
+	poly := GoldbergPolyhedron{}
+	poly.Polyhedron = NewPolyhedron(newVertices, newEdges, newFaces, )
 
 	poly.m = g.m
 	poly.n = g.n

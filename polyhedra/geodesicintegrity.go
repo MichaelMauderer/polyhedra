@@ -20,11 +20,11 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkFaces() error {
 }
 
 func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
-	edgeNum := len(gic.edges)
+	edgeNum := len(gic.Edges())
 	if edgeNum%30 != 0 {
 		return errors.New("Number of faces is not a multiple of 30.")
 	}
-	for _, edge := range gic.edges {
+	for _, edge := range gic.Edges() {
 		ev := edge.Vertices()
 		if ev[0] == ev[1] {
 			return errors.New("Edges contain illegal self-loops.")
@@ -84,9 +84,9 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkDistinctVertexNeighbors() er
 }
 
 func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
-	baseLineDistance := gic.edges[0].Length()
+	baseLineDistance := gic.Edges()[0].Length()
 	epsilon := 0.2
-	for _, edge := range gic.edges {
+	for _, edge := range gic.Edges() {
 		dist := edge.Length()
 		delta := math.Abs(dist - baseLineDistance)
 		if delta > epsilon {

@@ -18,7 +18,10 @@ type Polyhedron interface {
 	FaceVertexAdjacentFaces(f Face) []Face
 }
 
-//func NewPolyhedron([]Vertex, []edge, []Face) Polyhedron
+func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) Polyhedron{
+	poly := polyhedron{faces:faces, vertices:vertices,edges:edges}
+	return &poly
+}
 
 type polyhedron struct {
 	faces    []Face
@@ -57,7 +60,7 @@ func (p *polyhedron) AddFace(vertices []Vertex) {
 
 func (p *polyhedron) VertexDegree(vertex Vertex) int {
 	degree := 0
-	for _, edge := range p.edges {
+	for _, edge := range p.Edges() {
 		if edge.Contains(vertex) {
 			degree += 1
 		}
@@ -120,7 +123,7 @@ func (p *polyhedron) FaceVertexAdjacentFaces(f Face) []Face {
 
 func (p *polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
 	result := make([]Vertex, 0)
-	for _, edge := range p.edges {
+	for _, edge := range p.Edges() {
 		ev := edge.Vertices()
 		if vertex == ev[0] {
 			result = append(result, ev[1])

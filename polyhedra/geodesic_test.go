@@ -18,7 +18,7 @@ func TestGGSubdivision(t *testing.T) {
 		if faceNum != T*20 {
 			t.Errorf("Number of faces is %v instead of %v.", faceNum, 20*T)
 		}
-		edgeNum := len(gg.edges)
+		edgeNum := len(gg.Edges())
 		if edgeNum != T*30 {
 			t.Errorf("Number of edges is %v instead of %v.", edgeNum, 30*T)
 		}

@@ -13,15 +13,15 @@ func TestIcosahedronCreation(t *testing.T) {
 	}
 
 	if len(ico.faces) != 20 {
-		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.faces))
+		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.Faces()))
 	}
 
 	if len(ico.faces) != 20 {
-		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.faces))
+		t.Errorf("Icosahedron has %v faces instead of 20", len(ico.Faces()))
 	}
 
-	if len(ico.edges) != 30 {
-		t.Errorf("Icosahedron has %v edges instead of 30", len(ico.edges))
+	if len(ico.Edges()) != 30 {
+		t.Errorf("Icosahedron has %v edges instead of 30", len(ico.Edges()))
 	}
 
 	if len(ico.vertices) != 12 {
@@ -30,7 +30,7 @@ func TestIcosahedronCreation(t *testing.T) {
 
 	for _, vertex := range ico.vertices {
 		edge_count := 0
-		for _, edge := range ico.edges {
+		for _, edge := range ico.Edges() {
 			if edge.Contains(vertex) {
 				edge_count++
 			}

@@ -56,7 +56,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	newEdges := make([]Edge, 0, 30*t)
 
 	newVertices := make(map[edge]([]Vertex))
-	for _, e := range gg.edges {
+	for _, e := range gg.Edges() {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
 			nV[j] = NewVertex()
