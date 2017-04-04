@@ -13,6 +13,7 @@ func NewIcosahedron() Polyhedron {
 func newIcosahedron() polyhedron {
 
 	ico := polyhedron{}
+	ico.init()
 
 	c1 := math.Cos(2.0 * math.Pi / 5.0)
 	c2 := math.Cos(1.0 * math.Pi / 5.0)

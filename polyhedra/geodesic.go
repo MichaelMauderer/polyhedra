@@ -168,7 +168,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	}
 
 	// TODO: Avoid creation of duplicates in the first place.
-	gg.edges = cullDuplicates(newEdges)
+	gg.SetEdges(cullDuplicates(newEdges))
 	gg.faces = newFaces
 	gg.m *= m
 	gg.n *= n
