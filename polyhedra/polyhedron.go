@@ -19,7 +19,8 @@ type Polyhedron interface {
 }
 
 func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) Polyhedron {
-	poly := polyhedron{faces: faces, vertices: vertices}
+	poly := polyhedron{vertices: vertices}
+	poly.SetFaces(faces)
 	poly.vertexNeighbors = make(map[Vertex][]Vertex)
 	poly.AddEdges(edges)
 	return &poly
@@ -31,10 +32,13 @@ type polyhedron struct {
 
 	vertexNeighbors map[Vertex][]Vertex
 	edgeCache       []Edge
+
+	edgeToFace map[edge][]Face
 }
 
 func (p *polyhedron) init() {
 	p.vertexNeighbors = make(map[Vertex][]Vertex)
+	p.edgeToFace = make(map[edge][]Face)
 }
 
 func (p *polyhedron) Vertices() []Vertex {
@@ -96,13 +100,38 @@ func (p *polyhedron) SetEdges(edges []Edge) {
 	p.AddEdges(edges)
 }
 
+func (p *polyhedron) addFace(f Face) {
+	p.faces = append(p.faces, f)
+	for _, e := range f.Edges() {
+		p.edgeToFace[e.(edge)] = append(p.edgeToFace[e.(edge)], f)
+		redge := e.Reversed()
+		p.edgeToFace[redge.(edge)] = append(p.edgeToFace[redge.(edge)], f)
+	}
+}
+
 func (p *polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)
 		edges[i] = edge{vertex, vertices[nextI]}
+
 	}
-	p.faces = append(p.faces, NewFace(vertices))
+	f := NewFace(vertices)
+	p.addFace(f)
+}
+
+func (p *polyhedron) AddFaces(faces []Face) {
+	for _, face := range faces {
+		p.addFace(face)
+	}
+}
+
+func (p *polyhedron) SetFaces(faces []Face) {
+	p.faces = make([]Face, 0, len(faces))
+	p.edgeToFace = make(map[edge][]Face, len(faces))
+	for _, face := range faces {
+		p.addFace(face)
+	}
 }
 
 func (p *polyhedron) VertexDegree(vertex Vertex) int {
@@ -122,17 +151,8 @@ func (p *polyhedron) VertexAdjacentFaces(v Vertex) []Face {
 }
 
 func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]Face {
-	var resultFaces [2]Face
-	iR := 0
-	for i, face := range p.Faces() {
-		for _, ve := range face.Edges() {
-			if e.Equal(ve) {
-				resultFaces[iR] = p.faces[i]
-				iR += 1
-			}
-		}
-	}
-	return resultFaces
+	faces := p.edgeToFace[e.(edge)]
+	return [2]Face{faces[0], faces[1]}
 }
 
 func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []Face {
