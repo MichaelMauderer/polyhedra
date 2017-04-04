@@ -5,7 +5,12 @@ import (
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
-func NewIcosahedron() polyhedron {
+func NewIcosahedron() Polyhedron {
+	ico := newIcosahedron()
+	return &ico
+}
+
+func newIcosahedron() polyhedron {
 
 	ico := polyhedron{}
 

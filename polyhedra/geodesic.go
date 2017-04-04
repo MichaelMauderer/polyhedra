@@ -13,7 +13,7 @@ type Geodesic struct {
 type IcosahedralGeodesic Geodesic
 
 func NewIcosahedralGeodesic() *Geodesic {
-	ico := NewIcosahedron()
+	ico := newIcosahedron()
 	geo := Geodesic{ico, 1, 0}
 	return &geo
 }
@@ -79,9 +79,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 
 	for _, face := range gg.faces {
 
-		v0 := face.Loop[0]
-		v1 := face.Loop[1]
-		v2 := face.Loop[2]
+		v0 := face.Loop()[0]
+		v1 := face.Loop()[1]
+		v2 := face.Loop()[2]
 
 		e0 := Edge{v0, v1}
 		e1 := Edge{v1, v2}
@@ -144,7 +144,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			newEdges = append(newEdges, ne1)
 			newEdges = append(newEdges, ne2)
 
-			nF := Face{[]Vertex{nV0, nV1, nV2}}
+			nF := NewFace([]Vertex{nV0, nV1, nV2})
 
 			newFaces = append(newFaces, nF)
 		}

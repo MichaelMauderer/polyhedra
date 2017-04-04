@@ -1,6 +1,5 @@
 package polyhedra
 
-import ()
 
 type GoldbergPolyhedron struct {
 	polyhedron
@@ -10,9 +9,9 @@ type GoldbergPolyhedron struct {
 func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 
 	// For each edge create a new vertex
-	vertexMap := make(map[*Face]Vertex)
+	vertexMap := make(map[Face]Vertex)
 	for i, _ := range g.faces {
-		f := &g.faces[i]
+		f := g.faces[i]
 		v := NewVertex()
 		vertexMap[f] = v
 		v.setPosition(f.Center())
@@ -26,7 +25,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 		for i, f := range af {
 			loop[i] = vertexMap[f]
 		}
-		newFace := Face{SortedClockwise(loop)}
+		newFace := NewFace(SortedClockwise(loop))
 		newFaces = append(newFaces, newFace)
 	}
 

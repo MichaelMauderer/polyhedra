@@ -5,18 +5,7 @@ import (
 )
 
 func TestIcosahedronCreation(t *testing.T) {
-	ico := NewIcosahedron()
-
-	for _, face := range ico.faces{
-		for i := range face.Loop{
-			p1 := face.Loop[i].Position()
-			p2 := face.Loop[(i+1)%len(face.Loop)].Position()
-			t.Logf("vec4(%v,%v,%v,1.0),", p1.X, p1.Y, p1.Z)
-			t.Logf("vec4(%v,%v,%v,1.0),", p2.X, p2.Y, p2.Z)
-		}
-
-	}
-
+	ico := newIcosahedron()
 
 	errors := IcosahedralGeodesicIntegrityChecker(IcosahedralGeodesic(Geodesic{ico, 1, 0})).CheckIntegrity()
 	if len(errors) != 0 {
@@ -50,12 +39,4 @@ func TestIcosahedronCreation(t *testing.T) {
 			t.Errorf("Vertex %v has %v edges instaed of 5", vertex, edge_count)
 		}
 	}
-
-	for _, edge := range ico.edges {
-		face_count := 0
-		if face_count != 2 {
-			t.Errorf("Edge %v is contained in %v faces instaed of 2", edge, face_count)
-		}
-	}
-
 }

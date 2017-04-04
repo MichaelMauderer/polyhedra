@@ -42,7 +42,7 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 
 	gg := NewIcosahedralGeodesic()
 	err := IcosahedralGeodesicIntegrityChecker(*gg).CheckIntegrity()
-	if err != nil {
+	if err != nil && len(err) != 0 {
 		t.Fatal(err)
 	}
 
@@ -56,7 +56,7 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 			t.Fatalf("Legal subdivision failed: %v", err)
 		}
 		errs := IcosahedralGeodesicIntegrityChecker(*gg).CheckIntegrity()
-		if len(errs) == 0 {
+		if len(errs) != 0 {
 			t.Fatalf("Subdivision (%v,%v) created illegal GG: %v", n, m, errs)
 		}
 	}

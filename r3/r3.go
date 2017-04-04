@@ -62,8 +62,8 @@ func PlaneFromPoints(p1, p2, p3 Point3D) Plane3D {
 	return Plane3D{p1, pNormal}
 }
 
-func (pos Point3D) Spherical() SphericalCoordinate {
-	x, y, z := pos.X, pos.Y, pos.Z
+func (p Point3D) Spherical() SphericalCoordinate {
+	x, y, z := p.X, p.Y, p.Z
 	r := math.Sqrt(x*x + y*y + z*z)
 	theta := math.Acos(z / r)
 	phi := math.Atan2(y, x)

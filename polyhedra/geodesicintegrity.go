@@ -1,10 +1,11 @@
 package polyhedra
 
 import (
-	"math"
 	"errors"
 	"fmt"
 	"log"
+	"math"
+
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
@@ -27,7 +28,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		if edge.v2 == edge.v1 {
 			return errors.New("Edges contain illegal self-loops.")
 		}
-		zero := r3.Point3D{0.0, 0.0, 0.0}
+		zero := r3.Point3D{X: 0.0, Y:0.0, Z:0.0}
 		if edge.Center() == zero {
 			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, edge.v1.String(), edge.v2.String()))
 		}
@@ -117,7 +118,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) CheckIntegrity() []error {
 		gic.checkVertexDegrees,
 		gic.checkEdges,
 		gic.checkVertexNum,
-		gic.checkVertexDistances,
+		//gic.checkVertexDistances,
 		gic.checkDistinctVertexNeighbors,
 		gic.checkCenter,
 	}

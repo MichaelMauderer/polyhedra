@@ -1,10 +1,10 @@
 package r3
 
 import (
-	"testing"
+	"math"
 	"math/rand"
 	"sort"
-	"math"
+	"testing"
 )
 
 func shuffled(a []Point3D) []Point3D {
