@@ -36,6 +36,23 @@ func cullDuplicates(edges []Edge) []Edge {
 	return result
 }
 
+func normEdge(v1, v2 Vertex) edge {
+	if v1 > v2 {
+		return edge{v2, v1}
+	} else {
+		return edge{v1, v2}
+	}
+}
+
+func edgeSetToSlice(edges map[Edge]bool) []Edge {
+	result := make([]Edge, 0, len(edges))
+
+	for newEdge, _ := range edges {
+		result = append(result, newEdge)
+	}
+	return result
+}
+
 func (gg *Geodesic) Subdivide(m, n int) error {
 
 	if m == n {
@@ -53,7 +70,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 
 	t := m*m + m*n + n*n
 	newFaces := make([]Face, 0, 20*t)
-	newEdges := make([]Edge, 0, 30*t)
+	newEdges := make(map[Edge]bool)
 
 	newVertices := make(map[edge]([]Vertex))
 	for _, e := range gg.Edges() {
@@ -136,13 +153,13 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		// Walk through the rows of the vertices
 		// Connect the vertices above and below
 		connectNewFace := func(nV0, nV1, nV2 Vertex) {
-			ne0 := edge{nV0, nV1}
-			ne1 := edge{nV1, nV2}
-			ne2 := edge{nV2, nV0}
+			ne0 := normEdge(nV0, nV1)
+			ne1 := normEdge(nV1, nV2)
+			ne2 := normEdge(nV2, nV0)
 
-			newEdges = append(newEdges, ne0)
-			newEdges = append(newEdges, ne1)
-			newEdges = append(newEdges, ne2)
+			newEdges[ne0] = true
+			newEdges[ne1] = true
+			newEdges[ne2] = true
 
 			nF := NewFace([]Vertex{nV0, nV1, nV2})
 
@@ -168,7 +185,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	}
 
 	// TODO: Avoid creation of duplicates in the first place.
-	gg.SetEdges(cullDuplicates(newEdges))
+	gg.SetEdges(edgeSetToSlice(newEdges))
 	gg.SetFaces(newFaces)
 	gg.m *= m
 	gg.n *= n
