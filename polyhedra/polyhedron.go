@@ -5,7 +5,7 @@ import (
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
-type Polyhedron interface{
+type Polyhedron interface {
 	Vertices() []Vertex
 	Edges() []Edge
 	Faces() []*Face
@@ -39,7 +39,7 @@ func (p *polyhedron) Edges() []Edge {
 
 func (p *polyhedron) Faces() []*Face {
 	result := make([]*Face, len(p.faces))
-	for i:= range (p.faces){
+	for i := range p.faces {
 		result[i] = &p.faces[i]
 	}
 	return result
@@ -67,8 +67,8 @@ func (p *polyhedron) VertexDegree(vertex Vertex) int {
 func (p *polyhedron) VertexAdjacentFaces(v Vertex) []*Face {
 	resultFaces := make([]*Face, 0)
 	for i, face := range p.faces {
-		for _, vf  := range face.Loop{
-			if v == vf{
+		for _, vf := range face.Loop {
+			if v == vf {
 				resultFaces = append(resultFaces, &p.faces[i])
 			}
 		}
@@ -80,10 +80,10 @@ func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]*Face {
 	var resultFaces [2]*Face
 	iR := 0
 	for i, face := range p.Faces() {
-		for _, ve  := range face.Edges(){
-			if e.Equal(ve){
-				resultFaces[iR] =&p.faces[i]
-				iR +=1
+		for _, ve := range face.Edges() {
+			if e.Equal(ve) {
+				resultFaces[iR] = &p.faces[i]
+				iR += 1
 			}
 		}
 	}
@@ -92,24 +92,23 @@ func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]*Face {
 
 func (p *polyhedron) FaceEdgeAdjacentFaces(f *Face) []*Face {
 	resultFaces := make([]*Face, 0)
-		for _, e  := range f.Edges(){
-			for _, ef := range p.EdgeAdjacentFaces(e){
-				if f != ef{
-					resultFaces = append(resultFaces, ef)
-				}
+	for _, e := range f.Edges() {
+		for _, ef := range p.EdgeAdjacentFaces(e) {
+			if f != ef {
+				resultFaces = append(resultFaces, ef)
 			}
-
-
 		}
-return resultFaces
+
+	}
+	return resultFaces
 }
 
 func (p *polyhedron) FaceVertexAdjacentFaces(f *Face) []*Face {
 	resultFaces := make([]*Face, 0)
 	for _, face := range p.faces {
-		for _, v  := range face.Loop{
-			for _, vf := range p.VertexAdjacentFaces(v){
-				if f != vf{
+		for _, v := range face.Loop {
+			for _, vf := range p.VertexAdjacentFaces(v) {
+				if f != vf {
 					resultFaces = append(resultFaces, f)
 				}
 			}
@@ -135,9 +134,9 @@ type Face struct {
 	Loop []Vertex
 }
 
-func (f Face) Edges() []Edge{
+func (f Face) Edges() []Edge {
 	edges := make([]Edge, len(f.Loop))
-	for i := range f.Loop{
+	for i := range f.Loop {
 		v1 := f.Loop[i]
 		v2 := f.Loop[(i+1)%len(f.Loop)]
 		edges[i] = Edge{v1, v2}
@@ -145,15 +144,15 @@ func (f Face) Edges() []Edge{
 	return edges
 }
 
-func vertexCentroid(vertices []Vertex) r3.Point3D{
+func vertexCentroid(vertices []Vertex) r3.Point3D {
 	positions := make([]r3.Point3D, len(vertices))
-	for i, v := range vertices{
+	for i, v := range vertices {
 		positions[i] = v.Position()
 	}
 	return r3.Centroid3D(positions)
 }
 
-func (f Face) Center() r3.Point3D{
+func (f Face) Center() r3.Point3D {
 	return vertexCentroid(f.Loop)
 }
 
@@ -205,22 +204,20 @@ func (v Vertex) String() string {
 	return fmt.Sprintf("Vertex(id=%v, pos=%v)", uint(v), v.Position())
 }
 
-
-
-func SortedClockwise(vertices []Vertex) []Vertex{
- 	//Insertionsort based on clockwiseness
+func SortedClockwise(vertices []Vertex) []Vertex {
+	//Insertion sort based on clockwiseness
 	c := vertexCentroid(vertices)
-	n := r3.Point3D{0,0,0}.VectorTo(c).Normalised()
+	n := r3.Point3D{X: 0, Y:0, Z:0}.VectorTo(c).Normalised()
 	sorted := make([]Vertex, 1)
 	sorted[0] = vertices[0]
-	for _, v := range vertices[1:]{
+	for _, v := range vertices[1:] {
 		i := 0
-		for ; ; i++{
-			if i == len(sorted){
+		for ; ; i++ {
+			if i == len(sorted) {
 				break
 			}
 			vo := sorted[i]
-			if !r3.IsCCW(v.Position(), vo.Position(), c, n){
+			if !r3.IsCCW(v.Position(), vo.Position(), c, n) {
 				break
 			}
 		}
