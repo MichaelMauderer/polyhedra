@@ -18,32 +18,6 @@ func NewIcosahedralGeodesic() *Geodesic {
 	return &geo
 }
 
-func cullDuplicates(edges []Edge) []Edge {
-	result := make([]Edge, 0, len(edges))
-
-	for _, newEdge := range edges {
-		alreadyIn := false
-		for _, existingEdge := range result {
-			if newEdge.Equal(existingEdge) {
-				alreadyIn = true
-				break
-			}
-		}
-		if !alreadyIn {
-			result = append(result, newEdge)
-		}
-	}
-	return result
-}
-
-func normEdge(v1, v2 Vertex) edge {
-	if v1 > v2 {
-		return edge{v2, v1}
-	} else {
-		return edge{v1, v2}
-	}
-}
-
 func edgeSetToSlice(edges map[Edge]bool) []Edge {
 	result := make([]Edge, 0, len(edges))
 
