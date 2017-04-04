@@ -27,7 +27,7 @@ func (f *face) initEdges() {
 	for i := range f.loop {
 		v1 := f.loop[i]
 		v2 := f.loop[(i+1)%len(f.loop)]
-		f.edges[i] = Edge{v1, v2}
+		f.edges[i] = edge{v1, v2}
 	}
 }
 

@@ -24,7 +24,7 @@ func cullDuplicates(edges []Edge) []Edge {
 	for _, newEdge := range edges {
 		alreadyIn := false
 		for _, existingEdge := range result {
-			if newEdge == existingEdge || newEdge.Reversed() == existingEdge {
+			if newEdge.Equal(existingEdge) {
 				alreadyIn = true
 				break
 			}
@@ -35,7 +35,6 @@ func cullDuplicates(edges []Edge) []Edge {
 	}
 	return result
 }
-
 
 func (gg *Geodesic) Subdivide(m, n int) error {
 
@@ -56,15 +55,16 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	newFaces := make([]Face, 0, 20*t)
 	newEdges := make([]Edge, 0, 30*t)
 
-	newVertices := make(map[Edge]([]Vertex))
-	for edge_i, edge := range gg.edges {
+	newVertices := make(map[edge]([]Vertex))
+	for _, e := range gg.edges {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
 			nV[j] = NewVertex()
+			ev := e.Vertices()
 			c := r3.WeightedCentroid(
 				[]r3.Point3D{
-					vertexPositions[edge.v1],
-					vertexPositions[edge.v2],
+					vertexPositions[ev[0]],
+					vertexPositions[ev[1]],
 				},
 				[]float64{
 					float64(j + 1),
@@ -74,7 +74,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			vertexPositions[nV[j]] = c
 			gg.vertices = append(gg.vertices, nV[j])
 		}
-		newVertices[gg.edges[edge_i]] = nV
+		newVertices[e.(edge)] = nV
 	}
 
 	for _, face := range gg.faces {
@@ -83,9 +83,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		v1 := face.Loop()[1]
 		v2 := face.Loop()[2]
 
-		e0 := Edge{v0, v1}
-		e1 := Edge{v1, v2}
-		e2 := Edge{v2, v0}
+		e0 := edge{v0, v1}
+		e1 := edge{v1, v2}
+		e2 := edge{v2, v0}
 
 		// Create subdivision vertices
 		vertexRows := make([][]Vertex, m+1)
@@ -108,10 +108,10 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		vertexRows[m][0] = v1
 		vertexRows[m][m] = v2
 
-		getReplacements := func(e Edge) []Vertex {
+		getReplacements := func(e edge) []Vertex {
 			rep := newVertices[e]
 			if rep == nil {
-				rep_reversed := newVertices[e.Reversed()]
+				rep_reversed := newVertices[e.Reversed().(edge)]
 				rep = make([]Vertex, len(rep_reversed))
 				copy(rep, rep_reversed)
 				for i, j := 0, len(rep)-1; i < j; i, j = i+1, j-1 {
@@ -136,9 +136,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		// Walk through the rows of the vertices
 		// Connect the vertices above and below
 		connectNewFace := func(nV0, nV1, nV2 Vertex) {
-			ne0 := Edge{nV0, nV1}
-			ne1 := Edge{nV1, nV2}
-			ne2 := Edge{nV2, nV0}
+			ne0 := edge{nV0, nV1}
+			ne1 := edge{nV1, nV2}
+			ne2 := edge{nV2, nV0}
 
 			newEdges = append(newEdges, ne0)
 			newEdges = append(newEdges, ne1)

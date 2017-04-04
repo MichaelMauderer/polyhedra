@@ -25,12 +25,13 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		return errors.New("Number of faces is not a multiple of 30.")
 	}
 	for _, edge := range gic.edges {
-		if edge.v2 == edge.v1 {
+		ev := edge.Vertices()
+		if ev[0] == ev[1] {
 			return errors.New("Edges contain illegal self-loops.")
 		}
 		zero := r3.Point3D{X: 0.0, Y:0.0, Z:0.0}
 		if edge.Center() == zero {
-			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, edge.v1.String(), edge.v2.String()))
+			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, ev[0].String(), ev[1].String()))
 		}
 
 	}
@@ -89,7 +90,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 		dist := edge.Length()
 		delta := math.Abs(dist - baseLineDistance)
 		if delta > epsilon {
-			return errors.New(fmt.Sprintf("Edge %v deviates in length too much: %v with a baseline of %v", edge, delta, baseLineDistance))
+			return errors.New(fmt.Sprintf("edge %v deviates in length too much: %v with a baseline of %v", edge, delta, baseLineDistance))
 		}
 	}
 	return nil

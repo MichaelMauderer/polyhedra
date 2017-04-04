@@ -34,7 +34,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 		fs := g.EdgeAdjacentFaces(e)
 		v1 := vertexMap[fs[0]]
 		v2 := vertexMap[fs[1]]
-		newEdges = append(newEdges, Edge{v1, v2})
+		newEdges = append(newEdges, edge{v1, v2})
 	}
 
 	poly := GoldbergPolyhedron{}
