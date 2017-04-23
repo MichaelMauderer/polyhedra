@@ -48,7 +48,8 @@ func (p *polyhedron) Vertices() []Vertex {
 func (p *polyhedron) Edges() []Edge {
 	if len(p.edgeCache) == 0 {
 		edges := make([]Edge, 0)
-		for v, vns := range p.vertexNeighbors {
+		for _, v := range p.vertices {
+			vns := p.vertexNeighbors[v]
 			for _, vn := range vns {
 				edges = append(edges, edge{v, vn})
 			}

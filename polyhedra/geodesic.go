@@ -18,15 +18,6 @@ func NewIcosahedralGeodesic() *Geodesic {
 	return &geo
 }
 
-func edgeSetToSlice(edges map[Edge]bool) []Edge {
-	result := make([]Edge, 0, len(edges))
-
-	for newEdge, _ := range edges {
-		result = append(result, newEdge)
-	}
-	return result
-}
-
 func (gg *Geodesic) Subdivide(m, n int) error {
 
 	if m == n {
@@ -44,9 +35,10 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 
 	t := m*m + m*n + n*n
 	newFaces := make([]Face, 0, 20*t)
-	newEdges := make(map[Edge]bool)
+	newEdges := make([]Edge, 0)
+	newEdgeSet := make(map[Edge]bool)
 
-	newVertices := make(map[edge]([]Vertex))
+	vertexToEdgeMap := make(map[edge]([]Vertex))
 	for _, e := range gg.Edges() {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
@@ -65,7 +57,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			vertexPositions[nV[j]] = c
 			gg.vertices = append(gg.vertices, nV[j])
 		}
-		newVertices[e.(edge)] = nV
+		vertexToEdgeMap[e.(edge)] = nV
 	}
 
 	for _, face := range gg.faces {
@@ -100,9 +92,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		vertexRows[m][m] = v2
 
 		getReplacements := func(e edge) []Vertex {
-			rep := newVertices[e]
+			rep := vertexToEdgeMap[e]
 			if rep == nil {
-				rep_reversed := newVertices[e.Reversed().(edge)]
+				rep_reversed := vertexToEdgeMap[e.Reversed().(edge)]
 				rep = make([]Vertex, len(rep_reversed))
 				copy(rep, rep_reversed)
 				for i, j := 0, len(rep)-1; i < j; i, j = i+1, j-1 {
@@ -131,9 +123,18 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			ne1 := normEdge(nV1, nV2)
 			ne2 := normEdge(nV2, nV0)
 
-			newEdges[ne0] = true
-			newEdges[ne1] = true
-			newEdges[ne2] = true
+			if !newEdgeSet[ne0] {
+				newEdgeSet[ne0] = true
+				newEdges = append(newEdges, ne0)
+			}
+			if !newEdgeSet[ne1] {
+				newEdgeSet[ne1] = true
+				newEdges = append(newEdges, ne1)
+			}
+			if !newEdgeSet[ne2] {
+				newEdgeSet[ne2] = true
+				newEdges = append(newEdges, ne2)
+			}
 
 			nF := NewFace([]Vertex{nV0, nV1, nV2})
 
@@ -158,8 +159,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		}
 	}
 
-	// TODO: Avoid creation of duplicates in the first place.
-	gg.SetEdges(edgeSetToSlice(newEdges))
+	gg.SetEdges(newEdges)
 	gg.SetFaces(newFaces)
 	gg.m *= m
 	gg.n *= n

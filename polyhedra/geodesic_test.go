@@ -61,3 +61,23 @@ func TestGGRepeatedSubdivision(t *testing.T) {
 		}
 	}
 }
+
+func TestGGEdgeOrder(t *testing.T) {
+	gg1 := NewIcosahedralGeodesic()
+	gg2 := NewIcosahedralGeodesic()
+
+	e1S, e2S := gg1.Edges(), gg2.Edges()
+
+	epsilon := 0.01
+	for i := range e1S {
+		e1 := e1S[i]
+		e2 := e2S[i]
+
+		d := e1.Center().VectorTo(e2.Center()).Length()
+		if d > epsilon {
+			t.Log(d)
+			t.Errorf("Expected egde order to be the same but vertex %v is %v and %v.", i, e1, e2)
+
+		}
+	}
+}

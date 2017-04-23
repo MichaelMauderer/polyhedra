@@ -1,6 +1,10 @@
 package polyhedra
 
-import "github.com/MichaelMauderer/geometry/r3"
+import (
+	"fmt"
+
+	"github.com/MichaelMauderer/geometry/r3"
+)
 
 type Edge interface {
 	Length() float64
@@ -44,19 +48,22 @@ func (e edge) Vertices() [2]Vertex {
 	return [2]Vertex{e.v1, e.v2}
 }
 
-func cullDuplicates(edges []Edge) []Edge {
+func (e edge) String() string {
+	return fmt.Sprintf("Edge(%v, %v)", e.v1, e.v2)
+}
+
+func cullDuplicates(edges []Edge) (uniqueEdges []Edge) {
 	edgeSet := make(map[edge]bool, len(edges))
 
 	for _, newEdge := range edges {
 		vs := newEdge.Vertices()
-		edgeSet[normEdge(vs[0], vs[1])] = true
+		e := normEdge(vs[0], vs[1])
+		if !edgeSet[e] {
+			edgeSet[e] = true
+			uniqueEdges = append(uniqueEdges, e)
+		}
 	}
-
-	result := make([]Edge, 0, len(edgeSet))
-	for se, _ := range edgeSet{
-		result = append(result, se)
-	}
-	return result
+	return
 }
 
 func normEdge(v1, v2 Vertex) edge {
