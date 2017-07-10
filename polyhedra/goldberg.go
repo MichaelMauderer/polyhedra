@@ -11,7 +11,7 @@ type GoldbergPolyhedron struct {
 // This is achieved by replacing all faces with vertices and adding edges between vertices that corresponded to neighbouring faces.
 func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 
-	// For each edge create a new vertex
+	// For each Edge create a new vertex
 	vertexMap := make(map[Face]Vertex)
 	newVertices := make([]Vertex, 0)
 	for i, _ := range g.faces {
@@ -39,7 +39,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 		fs := g.EdgeAdjacentFaces(e)
 		v1 := vertexMap[fs[0]]
 		v2 := vertexMap[fs[1]]
-		newEdges = append(newEdges, edge{v1, v2})
+		newEdges = append(newEdges, Edge{v1, v2})
 	}
 
 	poly := GoldbergPolyhedron{}

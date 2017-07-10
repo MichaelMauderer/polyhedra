@@ -36,13 +36,13 @@ type polyhedron struct {
 	vertexNeighbors map[Vertex][]Vertex
 	edgeCache       []Edge
 
-	edgeToFace map[edge][]Face
+	edgeToFace map[Edge][]Face
 }
 
 // init initialises the polyhedrons access caches.
 func (p *polyhedron) init() {
 	p.vertexNeighbors = make(map[Vertex][]Vertex)
-	p.edgeToFace = make(map[edge][]Face)
+	p.edgeToFace = make(map[Edge][]Face)
 }
 
 // Vertices returns the polyhedrons vertices.
@@ -57,7 +57,7 @@ func (p *polyhedron) Edges() []Edge {
 		for _, v := range p.vertices {
 			vns := p.vertexNeighbors[v]
 			for _, vn := range vns {
-				edges = append(edges, edge{v, vn})
+				edges = append(edges, Edge{v, vn})
 			}
 		}
 		p.edgeCache = cullDuplicates(edges)
@@ -82,7 +82,7 @@ func (p *polyhedron) AddVertex(v Vertex) {
 	p.vertices = append(p.vertices, v)
 }
 
-// addSingleEdge adds a edge between the two given vertices.
+// addSingleEdge adds a Edge between the two given vertices.
 func (p *polyhedron) addSingleEdge(v1 Vertex, v2 Vertex) {
 	vn, ok := p.vertexNeighbors[v1]
 	if !ok {
@@ -92,7 +92,7 @@ func (p *polyhedron) addSingleEdge(v1 Vertex, v2 Vertex) {
 	p.vertexNeighbors[v1] = append(vn, v2)
 }
 
-// AddEdge adds an edge between the two given vertices.
+// AddEdge adds an Edge between the two given vertices.
 func (p *polyhedron) AddEdge(v1 Vertex, v2 Vertex) {
 	p.addSingleEdge(v1, v2)
 	p.addSingleEdge(v2, v1)
@@ -118,18 +118,18 @@ func (p *polyhedron) SetEdges(edges []Edge) {
 func (p *polyhedron) addFace(f Face) {
 	p.faces = append(p.faces, f)
 	for _, e := range f.Edges() {
-		p.edgeToFace[e.(edge)] = append(p.edgeToFace[e.(edge)], f)
+		p.edgeToFace[e] = append(p.edgeToFace[e], f)
 		redge := e.Reversed()
-		p.edgeToFace[redge.(edge)] = append(p.edgeToFace[redge.(edge)], f)
+		p.edgeToFace[redge] = append(p.edgeToFace[redge], f)
 	}
 }
 
 // AddFace adds a face defined by the given vertices to the polyhedron.
 func (p *polyhedron) AddFace(vertices []Vertex) {
-	edges := make([]edge, len(vertices))
+	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)
-		edges[i] = edge{vertex, vertices[nextI]}
+		edges[i] = Edge{vertex, vertices[nextI]}
 
 	}
 	f := NewFace(vertices)
@@ -146,7 +146,7 @@ func (p *polyhedron) AddFaces(faces []Face) {
 // SetFaces clears all current faces and adds the given faces instead.
 func (p *polyhedron) SetFaces(faces []Face) {
 	p.faces = make([]Face, 0, len(faces))
-	p.edgeToFace = make(map[edge][]Face, len(faces))
+	p.edgeToFace = make(map[Edge][]Face, len(faces))
 	for _, face := range faces {
 		p.addFace(face)
 	}
@@ -169,13 +169,13 @@ func (p *polyhedron) VertexAdjacentFaces(v Vertex) []Face {
 	return resultFaces
 }
 
-// EdgeAdjacentFaces returns the faces that are adjacent to the given edge.
+// EdgeAdjacentFaces returns the faces that are adjacent to the given Edge.
 func (p *polyhedron) EdgeAdjacentFaces(e Edge) [2]Face {
-	faces := p.edgeToFace[e.(edge)]
+	faces := p.edgeToFace[e]
 	return [2]Face{faces[0], faces[1]}
 }
 
-// FaceEdgeAdjacentFaces returns the faces that share an edge with the given facce.
+// FaceEdgeAdjacentFaces returns the faces that share an Edge with the given facce.
 func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []Face {
 	resultFaces := make([]Face, 0)
 	for _, e := range f.Edges() {
@@ -204,7 +204,7 @@ func (p *polyhedron) FaceVertexAdjacentFaces(f Face) []Face {
 	return resultFaces
 }
 
-// AdjacentVertices returns all vertices that are part of an edge with the given vertex.
+// AdjacentVertices returns all vertices that are part of an Edge with the given vertex.
 func (p *polyhedron) AdjacentVertices(vertex Vertex) []Vertex {
 	return p.vertexNeighbors[vertex]
 }

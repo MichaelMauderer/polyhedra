@@ -46,7 +46,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 	newEdges := make([]Edge, 0)
 	newEdgeSet := make(map[Edge]bool)
 
-	vertexToEdgeMap := make(map[edge]([]Vertex))
+	vertexToEdgeMap := make(map[Edge]([]Vertex))
 	for _, e := range gg.Edges() {
 		nV := make([]Vertex, m-1)
 		for j := range nV {
@@ -65,7 +65,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			vertexPositions[nV[j]] = c
 			gg.vertices = append(gg.vertices, nV[j])
 		}
-		vertexToEdgeMap[e.(edge)] = nV
+		vertexToEdgeMap[e] = nV
 	}
 
 	for _, face := range gg.faces {
@@ -74,9 +74,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		v1 := face.Loop()[1]
 		v2 := face.Loop()[2]
 
-		e0 := edge{v0, v1}
-		e1 := edge{v1, v2}
-		e2 := edge{v2, v0}
+		e0 := Edge{v0, v1}
+		e1 := Edge{v1, v2}
+		e2 := Edge{v2, v0}
 
 		// Create subdivision vertices
 		vertexRows := make([][]Vertex, m+1)
@@ -99,10 +99,10 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		vertexRows[m][0] = v1
 		vertexRows[m][m] = v2
 
-		getReplacements := func(e edge) []Vertex {
+		getReplacements := func(e Edge) []Vertex {
 			rep := vertexToEdgeMap[e]
 			if rep == nil {
-				rep_reversed := vertexToEdgeMap[e.Reversed().(edge)]
+				rep_reversed := vertexToEdgeMap[e.Reversed()]
 				rep = make([]Vertex, len(rep_reversed))
 				copy(rep, rep_reversed)
 				for i, j := 0, len(rep)-1; i < j; i, j = i+1, j-1 {

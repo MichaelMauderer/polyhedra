@@ -35,7 +35,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		}
 		zero := r3.Point3D{X: 0.0, Y: 0.0, Z: 0.0}
 		if edge.Center() == zero {
-			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, ev[0].String(), ev[1].String()))
+			return errors.New(fmt.Sprintf("Contains Edge %v centered at zero with vertices %v to %v", edge, ev[0].String(), ev[1].String()))
 		}
 
 	}
@@ -99,7 +99,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 		dist := edge.Length()
 		delta := math.Abs(dist - baseLineDistance)
 		if delta > epsilon {
-			return errors.New(fmt.Sprintf("edge %v deviates in length too much: %v with a baseline of %v", edge, delta, baseLineDistance))
+			return errors.New(fmt.Sprintf("Edge %v deviates in length too much: %v with a baseline of %v", edge, delta, baseLineDistance))
 		}
 	}
 	return nil
