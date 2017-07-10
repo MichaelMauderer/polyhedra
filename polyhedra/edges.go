@@ -17,6 +17,14 @@ type Edge interface {
 	Vertices() [2]Vertex
 }
 
+func NewEdge(v1, v2 Vertex) edge {
+	if v1 > v2 {
+		return edge{v2, v1}
+	} else {
+		return edge{v1, v2}
+	}
+}
+
 type edge struct {
 	v1, v2 Vertex
 }
@@ -68,20 +76,11 @@ func cullDuplicates(edges []Edge) (uniqueEdges []Edge) {
 
 	for _, newEdge := range edges {
 		vs := newEdge.Vertices()
-		e := normEdge(vs[0], vs[1])
+		e := NewEdge(vs[0], vs[1])
 		if !edgeSet[e] {
 			edgeSet[e] = true
 			uniqueEdges = append(uniqueEdges, e)
 		}
 	}
 	return
-}
-
-// normEdge returns a version of this edge that has v1 set to the vertex with the smaller id, and v2 to the larger one.
-func normEdge(v1, v2 Vertex) edge {
-	if v1 > v2 {
-		return edge{v2, v1}
-	} else {
-		return edge{v1, v2}
-	}
 }

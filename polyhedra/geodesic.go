@@ -127,9 +127,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		// Walk through the rows of the vertices
 		// Connect the vertices above and below
 		connectNewFace := func(nV0, nV1, nV2 Vertex) {
-			ne0 := normEdge(nV0, nV1)
-			ne1 := normEdge(nV1, nV2)
-			ne2 := normEdge(nV2, nV0)
+			ne0 := NewEdge(nV0, nV1)
+			ne1 := NewEdge(nV1, nV2)
+			ne2 := NewEdge(nV2, nV0)
 
 			if !newEdgeSet[ne0] {
 				newEdgeSet[ne0] = true
