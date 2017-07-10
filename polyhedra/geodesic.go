@@ -5,21 +5,29 @@ import (
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
+// Geodesic represents a geodesic polyhedron.
+// More information on geodesic polyhedra can be found at https://en.wikipedia.org/wiki/Geodesic_polyhedron
 type Geodesic struct {
 	polyhedron
 	m, n int
 }
 
+// IcosahedralGeodesic represents a geodesic polyhedron with an icosahedron as a base.
 type IcosahedralGeodesic Geodesic
 
+// NewIcosahedralGeodesic creates a geodesic polyhedron from an icosahedron through subdivision.
 func NewIcosahedralGeodesic() *Geodesic {
 	ico := newIcosahedron()
 	geo := Geodesic{ico, 1, 0}
 	return &geo
 }
 
+// Subdivide applies the surface subdivision modifier to the geodesic using the given breakdown structure (n,m).
+// Currently only the breakdown structure (2,0) is supported.
+// For more information see https://en.wikibooks.org/wiki/Geodesic_Grids/Breakdown_structures
 func (gg *Geodesic) Subdivide(m, n int) error {
 
+	// TODO: implement Class I and II breakdowns.
 	if m == n {
 		return errors.New("Class II not supported")
 	}
@@ -30,7 +38,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		return nil
 	}
 	if m != 2 {
-		return errors.New("Only (m=2,n=0) subdivission supported.")
+		return errors.New("Only (m=2,n=0) subdivision supported.")
 	}
 
 	t := m*m + m*n + n*n

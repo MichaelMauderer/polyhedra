@@ -1,10 +1,14 @@
 package polyhedra
 
+// GoldbergPolyhedron represents a polyhedron made of hexagons and pentagons.
+// For more information see https://en.wikipedia.org/wiki/Goldberg_polyhedron
 type GoldbergPolyhedron struct {
 	Polyhedron
 	m, n int
 }
 
+// GeodesicToGoldberg returns the goldberg polyhedron that corresponds to the given geodesic polyhedron.
+// This is achieved by replacing all faces with vertices and adding edges between vertices that corresponded to neighbouring faces.
 func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 
 	// For each edge create a new vertex
@@ -18,7 +22,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 		v.setPosition(f.Center())
 	}
 
-	// Turn adjacent vertices into faces into edges
+	// Turn adjacent vertices into faces
 	newFaces := make([]Face, 0)
 	for _, v := range g.vertices {
 		af := g.VertexAdjacentFaces(v)
@@ -39,7 +43,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 	}
 
 	poly := GoldbergPolyhedron{}
-	poly.Polyhedron = NewPolyhedron(newVertices, newEdges, newFaces, )
+	poly.Polyhedron = NewPolyhedron(newVertices, newEdges, newFaces)
 
 	poly.m = g.m
 	poly.n = g.n

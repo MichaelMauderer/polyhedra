@@ -1,10 +1,11 @@
 package polyhedra
 
 import (
-	"math"
 	"github.com/MichaelMauderer/geometry/r3"
+	"math"
 )
 
+// NewIcosahedron creates an icosahedron.
 func NewIcosahedron() Polyhedron {
 	ico := newIcosahedron()
 	return &ico
@@ -48,12 +49,12 @@ func newIcosahedron() polyhedron {
 	topVertex := ico.vertices[0]
 	bottomVertex := ico.vertices[1]
 
-	topPentagon := ico.vertices[2:2+5]
-	bottomPentagon := ico.vertices[7:7+5]
+	topPentagon := ico.vertices[2 : 2+5]
+	bottomPentagon := ico.vertices[7 : 7+5]
 
 	connectPoles := func(pentagon []Vertex, poleVertex Vertex) {
 		for i, vertex := range pentagon {
-			neighborLIndex := ( 5 + i - 1 ) % 5
+			neighborLIndex := (5 + i - 1) % 5
 			neighborL := pentagon[neighborLIndex]
 
 			ico.AddEdge(vertex, neighborL)

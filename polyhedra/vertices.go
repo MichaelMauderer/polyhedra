@@ -5,33 +5,44 @@ import (
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
+// Vertex represents a point within a polyhedron where edges meet.
 type Vertex uint
 
+// vertexId is the global id counter that is used to generate unique ids fo vertices.
 var vertexId Vertex = 0
+
+// vertexPositions contains the position for each vertex.
 var vertexPositions = make(map[Vertex]r3.Point3D)
 
+// NewVertex creates an new vertex.
 func NewVertex() Vertex {
 	vertexId++
 	return vertexId
 }
 
+// setPosition sets the position of the vertex.
 func (v Vertex) setPosition(coords r3.Point3D) {
 	vertexPositions[v] = coords
 }
 
+// Position returns the position of the vertex.
 func (v Vertex) Position() r3.Point3D {
 	return vertexPositions[v]
 }
 
+// String returns the string representation of the vertex.
 func (v Vertex) String() string {
 	return fmt.Sprintf("Vertex(id=%v, pos=%v)", uint(v), v.Position())
 }
 
+// SortedClockwise sorts the vertices clockwise around their geometric center.
 func SortedClockwise(vertices []Vertex) []Vertex {
 	//Insertion sort based on clockwiseness
 	c := vertexCentroid(vertices)
+	// The normal of the plane of sorting is defined by the vector from zero to the geometric center.
 	n := r3.Point3D{X: 0, Y: 0, Z: 0}.VectorTo(c).Normalised()
 	sorted := make([]Vertex, 1)
+	// The initial vertex is chosen as the first vertex in the slice.
 	sorted[0] = vertices[0]
 	for _, v := range vertices[1:] {
 		i := 0
@@ -52,6 +63,7 @@ func SortedClockwise(vertices []Vertex) []Vertex {
 	return sorted
 }
 
+// vertexCentroid computes the centroid of the given vertices.
 func vertexCentroid(vertices []Vertex) r3.Point3D {
 	positions := make([]r3.Point3D, len(vertices))
 	for i, v := range vertices {

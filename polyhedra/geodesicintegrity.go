@@ -9,8 +9,11 @@ import (
 	"github.com/MichaelMauderer/geometry/r3"
 )
 
+// IcosahedralGeodesicIntegrityChecker allows to check for certain features of an icosahedral geodesic.
+// This is mostly useful for debugging algorithms that modify a polyhedron to check that certain properties are not violated.
 type IcosahedralGeodesicIntegrityChecker IcosahedralGeodesic
 
+// checkFaces checks that the number of faces is a multiple of 20.
 func (gic IcosahedralGeodesicIntegrityChecker) checkFaces() error {
 	faceNum := len(gic.faces)
 	if faceNum%20 != 0 {
@@ -19,6 +22,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkFaces() error {
 	return nil
 }
 
+// checkEdges checks that the number of faces is a multiple of 30 and no edges are degenerate.
 func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 	edgeNum := len(gic.Edges())
 	if edgeNum%30 != 0 {
@@ -29,7 +33,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		if ev[0] == ev[1] {
 			return errors.New("Edges contain illegal self-loops.")
 		}
-		zero := r3.Point3D{X: 0.0, Y:0.0, Z:0.0}
+		zero := r3.Point3D{X: 0.0, Y: 0.0, Z: 0.0}
 		if edge.Center() == zero {
 			return errors.New(fmt.Sprintf("Contains edge %v centered at zero with vertices %v to %v", edge, ev[0].String(), ev[1].String()))
 		}
@@ -38,6 +42,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 	return nil
 }
 
+// checkVertexNum checks that the number of vertices fulfills Vn=(n*10+2).
 func (gic IcosahedralGeodesicIntegrityChecker) checkVertexNum() error {
 	vertexNum := len(gic.vertices)
 	if (vertexNum-2)%10 != 0 {
@@ -46,6 +51,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexNum() error {
 	return nil
 }
 
+// checkVertexDegrees checks that each vertex has degree 5 or 6.
 func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDegrees() error {
 	foundWrongOne := false
 	for _, vertex := range gic.vertices {
@@ -64,6 +70,8 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDegrees() error {
 	return nil
 }
 
+// checkDistinctVertexNeighbors checks that there are no degenerate neighborhood relationships.
+// This means checking that no vertex is its own neighbour and no neighbour appears twice.
 func (gic IcosahedralGeodesicIntegrityChecker) checkDistinctVertexNeighbors() error {
 	for _, vertex := range gic.vertices {
 		neighbors := gic.AdjacentVertices(vertex)
@@ -83,6 +91,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkDistinctVertexNeighbors() er
 	return nil
 }
 
+// checkVertexDistances checks that all vertex distances are about the same.
 func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 	baseLineDistance := gic.Edges()[0].Length()
 	epsilon := 0.2
@@ -96,22 +105,24 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 	return nil
 }
 
+// checkCenter checks that the polyhedron is centered at (0,0,0).
 func (gic IcosahedralGeodesicIntegrityChecker) checkCenter() error {
 	vertices := gic.vertices
 	positions := make([]r3.Point3D, len(vertices))
-	for i := range vertices{
+	for i := range vertices {
 		positions[i] = vertices[i].Position()
 	}
 	center := r3.Centroid3D(positions)
 	epsilon := 0.000001
-	if r3.Distance(center, r3.Point3D{0,0,0}) > epsilon{
+	if r3.Distance(center, r3.Point3D{0, 0, 0}) > epsilon {
 		return errors.New(fmt.Sprintf("Center has mvoed from origin to %v", center))
 
 	}
 	return nil
 }
 
-
+// CheckIntegrity performs a number of different sanity checks. All violated checks will return an error that
+// is returned in the resulting error slice. If no error found an empty slice is returned.
 func (gic IcosahedralGeodesicIntegrityChecker) CheckIntegrity() []error {
 
 	var checks = []func() error{
