@@ -6,7 +6,7 @@ import (
 	"log"
 	"math"
 
-	"github.com/MichaelMauderer/geometry/r3"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 // IcosahedralGeodesicIntegrityChecker allows to check for certain features of an icosahedral geodesic.

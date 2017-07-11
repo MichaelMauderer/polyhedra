@@ -2,7 +2,7 @@ package polyhedra
 
 import (
 	"fmt"
-	"github.com/MichaelMauderer/geometry/r3"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 // Vertex represents a point within a polyhedron where edges meet.

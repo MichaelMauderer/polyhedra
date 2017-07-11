@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelMauderer/geometry/r3"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 func TestEdgeReversal(t *testing.T) {

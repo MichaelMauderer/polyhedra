@@ -1,6 +1,6 @@
 package polyhedra
 
-import "github.com/MichaelMauderer/geometry/r3"
+import "github.com/MichaelMauderer/polyhedra/r3"
 
 // NewFace creates a Face from the given list of vertices.
 func NewFace(loop []Vertex) Face {

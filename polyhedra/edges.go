@@ -3,7 +3,7 @@ package polyhedra
 import (
 	"fmt"
 
-	"github.com/MichaelMauderer/geometry/r3"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 func NewEdge(v1, v2 Vertex) Edge {

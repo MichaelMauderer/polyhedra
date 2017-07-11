@@ -2,7 +2,7 @@ package polyhedra
 
 import (
 	"errors"
-	"github.com/MichaelMauderer/geometry/r3"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 // Geodesic represents a geodesic polyhedron.
