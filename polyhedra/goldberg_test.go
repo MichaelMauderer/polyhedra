@@ -108,7 +108,7 @@ func TestFaceOrder(t *testing.T) {
 		d := f1.Center().VectorTo(f2.Center()).Length()
 		if d > epsilon {
 			t.Log(d)
-			t.Errorf("Expected face order to be the same but vertex %v is %v and %v.", i, f1, f2)
+			t.Errorf("Expected Face order to be the same but vertex %v is %v and %v.", i, f1, f2)
 
 		}
 	}

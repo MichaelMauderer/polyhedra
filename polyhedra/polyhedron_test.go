@@ -34,7 +34,7 @@ func shuffledVertices(a []Vertex) []Vertex {
 func TestSortedClockwise(t *testing.T) {
 	t.Skip("Skipping clockwise sorting test.")
 
-	sortedPositions := []r3.Point3D{
+	sortedPositions := []r3.Point{
 		{2, 2, 1},
 		{2, 1, 2},
 		{1, 1, 3},

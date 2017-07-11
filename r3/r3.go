@@ -5,30 +5,30 @@ import (
 	"sort"
 )
 
-// Point3D represent a point in 3D space through cartesian coordinates.
-type Point3D struct {
+// Point represent a point in 3D space through cartesian coordinates.
+type Point struct {
 	X, Y, Z float64
 }
 
-// Vector3D represent a vector in 3D space .
-type Vector3D struct {
+// Vector represent a vector in 3D space .
+type Vector struct {
 	X, Y, Z float64
 }
 
-// Plane3D represent a plane in 3D space .
-type Plane3D struct {
-	orig   Point3D
-	normal Vector3D
+// Plane represent a plane in 3D space .
+type Plane struct {
+	orig   Point
+	normal Vector
 }
 
 // Dot computes the dot product between this and the given vector.
-func (v Vector3D) Dot(v2 Vector3D) float64 {
+func (v Vector) Dot(v2 Vector) float64 {
 	return v.X*v2.X + v.Y*v2.Y + v.Z*v2.Z
 }
 
 // Cross computes the cross product between this and the given vector.
-func (v Vector3D) Cross(v2 Vector3D) Vector3D {
-	return Vector3D{
+func (v Vector) Cross(v2 Vector) Vector {
+	return Vector{
 		v.Y*v2.Z - v.Z*v2.Y,
 		v.Z*v2.X - v.X*v2.Z,
 		v.X*v2.Y - v.Y*v2.X,
@@ -36,47 +36,47 @@ func (v Vector3D) Cross(v2 Vector3D) Vector3D {
 }
 
 // Length returns the length of the vector.
-func (v Vector3D) Length() float64 {
+func (v Vector) Length() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
 }
 
 // Normalised returns a copy of this vector that is scaled to length 1.
-func (v Vector3D) Normalised() Vector3D {
+func (v Vector) Normalised() Vector {
 	return v.Scale(1 / v.Length())
 }
 
 // Scale returns a copy of this vector that has its length multiplied by the given value.
-func (v Vector3D) Scale(s float64) Vector3D {
-	return Vector3D{v.X * s, v.Y * s, v.Z * s}
+func (v Vector) Scale(s float64) Vector {
+	return Vector{v.X * s, v.Y * s, v.Z * s}
 }
 
 // VectorTo returns the vector from this point to the given point.
-func (p Point3D) VectorTo(p2 Point3D) Vector3D {
-	return Vector3D{p2.X - p.X, p2.Y - p.Y, p2.Z - p.Z}
+func (p Point) VectorTo(p2 Point) Vector {
+	return Vector{p2.X - p.X, p2.Y - p.Y, p2.Z - p.Z}
 }
 
 // Add returns the point that results by displacing this point by the given vector.
-func (p Point3D) Add(v Vector3D) Point3D {
-	return Point3D{p.X + v.X, p.Y + v.Y, p.Z + v.Z}
+func (p Point) Add(v Vector) Point {
+	return Point{p.X + v.X, p.Y + v.Y, p.Z + v.Z}
 }
 
 // ProjectPointOnPlane returns the point in the given plane  that is closes to the given point.
-func ProjectPointOnPlane(point Point3D, plane Plane3D) Point3D {
+func ProjectPointOnPlane(point Point, plane Plane) Point {
 	dist := plane.orig.VectorTo(point).Dot(plane.normal)
 	vecToPlane := plane.normal.Scale(-dist)
 	return point.Add(vecToPlane)
 }
 
 // PlaneFromPoints returns the plane defined by the given three points.
-func PlaneFromPoints(p1, p2, p3 Point3D) Plane3D {
+func PlaneFromPoints(p1, p2, p3 Point) Plane {
 	dir1 := p1.VectorTo(p2)
 	dir2 := p1.VectorTo(p3)
 	pNormal := dir1.Cross(dir2).Normalised()
-	return Plane3D{p1, pNormal}
+	return Plane{p1, pNormal}
 }
 
 // Spherical returns the spherical coordinates of the given point.
-func (p Point3D) Spherical() SphericalCoordinate {
+func (p Point) Spherical() SphericalCoordinate {
 	x, y, z := p.X, p.Y, p.Z
 	r := math.Sqrt(x*x + y*y + z*z)
 	theta := math.Acos(z / r)
@@ -95,7 +95,7 @@ type UnitSphereCoordinates struct {
 }
 
 // Centroid3D computes the centroid of the given points.
-func Centroid3D(points []Point3D) Point3D {
+func Centroid3D(points []Point) Point {
 	x, y, z := 0.0, 0.0, 0.0
 	for _, p := range points {
 		x += p.X
@@ -106,12 +106,12 @@ func Centroid3D(points []Point3D) Point3D {
 	y /= float64(len(points))
 	z /= float64(len(points))
 
-	return Point3D{x, y, z}
+	return Point{x, y, z}
 }
 
 // WeightedCentroid computes the centroid of the given points, but the contribution of each point is scaled by its weight.
 // The weights represent relative weights and will be scaled by the overall sum of weights.
-func WeightedCentroid(points []Point3D, weights []float64) Point3D {
+func WeightedCentroid(points []Point, weights []float64) Point {
 	x, y, z := 0.0, 0.0, 0.0
 	wSum := 0.0
 	for i, p := range points {
@@ -125,11 +125,11 @@ func WeightedCentroid(points []Point3D, weights []float64) Point3D {
 	y /= wSum
 	z /= wSum
 
-	return Point3D{x, y, z}
+	return Point{x, y, z}
 }
 
 // Distance computes the distance between the two given points.
-func Distance(p1 Point3D, p2 Point3D) float64 {
+func Distance(p1 Point, p2 Point) float64 {
 	dx := p1.X - p2.X
 	dy := p1.Y - p2.Y
 	dz := p1.Z - p2.Z
@@ -137,7 +137,7 @@ func Distance(p1 Point3D, p2 Point3D) float64 {
 }
 
 // CounterClockwise3D sorts the given points clockwise around the given normal.
-func CounterClockwise3D(v []Point3D, normal Vector3D) sort.Interface {
+func CounterClockwise3D(v []Point, normal Vector) sort.Interface {
 	cc := counterClockwise3D{}
 	cc.v = v
 	cc.center = Centroid3D(v)
@@ -146,9 +146,9 @@ func CounterClockwise3D(v []Point3D, normal Vector3D) sort.Interface {
 }
 
 type counterClockwise3D struct {
-	v      []Point3D
-	normal Vector3D
-	center Point3D
+	v      []Point
+	normal Vector
+	center Point
 }
 
 func (v counterClockwise3D) Len() int      { return len(v.v) }
@@ -162,7 +162,7 @@ func (v counterClockwise3D) Less(i, j int) bool {
 }
 
 // IsCCW returns whether point a is clockwise to point b relative to the given normal.
-func IsCCW(a, b Point3D, center Point3D, normal Vector3D) bool {
+func IsCCW(a, b Point, center Point, normal Vector) bool {
 	v1 := center.VectorTo(a)
 	v2 := center.VectorTo(b)
 	vc := v1.Cross(v2)

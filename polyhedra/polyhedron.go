@@ -114,7 +114,7 @@ func (p *polyhedron) SetEdges(edges []Edge) {
 	p.AddEdges(edges)
 }
 
-// addFace adds the given face to the polyhedron.
+// addFace adds the given Face to the polyhedron.
 func (p *polyhedron) addFace(f Face) {
 	p.faces = append(p.faces, f)
 	for _, e := range f.Edges() {
@@ -124,7 +124,7 @@ func (p *polyhedron) addFace(f Face) {
 	}
 }
 
-// AddFace adds a face defined by the given vertices to the polyhedron.
+// AddFace adds a Face defined by the given vertices to the polyhedron.
 func (p *polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
@@ -180,7 +180,7 @@ func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []Face {
 	resultFaces := make([]Face, 0)
 	for _, e := range f.Edges() {
 		for _, ef := range p.EdgeAdjacentFaces(e) {
-			if f != ef {
+			if !f.Equals(ef) {
 				resultFaces = append(resultFaces, ef)
 			}
 		}
@@ -189,13 +189,13 @@ func (p *polyhedron) FaceEdgeAdjacentFaces(f Face) []Face {
 	return resultFaces
 }
 
-// FaceVertexAdjacentFaces returns the faces that share a vertex with the given face.
+// FaceVertexAdjacentFaces returns the faces that share a vertex with the given Face.
 func (p *polyhedron) FaceVertexAdjacentFaces(f Face) []Face {
 	resultFaces := make([]Face, 0)
 	for _, face := range p.faces {
 		for _, v := range face.Loop() {
 			for _, vf := range p.VertexAdjacentFaces(v) {
-				if f != vf {
+				if !f.Equals(vf) {
 					resultFaces = append(resultFaces, f)
 				}
 			}

@@ -12,7 +12,7 @@ type Vertex uint
 var vertexId Vertex = 0
 
 // vertexPositions contains the position for each vertex.
-var vertexPositions = make(map[Vertex]r3.Point3D)
+var vertexPositions = make(map[Vertex]r3.Point)
 
 // NewVertex creates an new vertex.
 func NewVertex() Vertex {
@@ -21,12 +21,12 @@ func NewVertex() Vertex {
 }
 
 // setPosition sets the position of the vertex.
-func (v Vertex) setPosition(coords r3.Point3D) {
+func (v Vertex) setPosition(coords r3.Point) {
 	vertexPositions[v] = coords
 }
 
 // Position returns the position of the vertex.
-func (v Vertex) Position() r3.Point3D {
+func (v Vertex) Position() r3.Point {
 	return vertexPositions[v]
 }
 
@@ -40,7 +40,7 @@ func SortedClockwise(vertices []Vertex) []Vertex {
 	//Insertion sort based on clockwiseness
 	c := vertexCentroid(vertices)
 	// The normal of the plane of sorting is defined by the vector from zero to the geometric center.
-	n := r3.Point3D{X: 0, Y: 0, Z: 0}.VectorTo(c).Normalised()
+	n := r3.Point{X: 0, Y: 0, Z: 0}.VectorTo(c).Normalised()
 	sorted := make([]Vertex, 1)
 	// The initial vertex is chosen as the first vertex in the slice.
 	sorted[0] = vertices[0]
@@ -64,8 +64,8 @@ func SortedClockwise(vertices []Vertex) []Vertex {
 }
 
 // vertexCentroid computes the centroid of the given vertices.
-func vertexCentroid(vertices []Vertex) r3.Point3D {
-	positions := make([]r3.Point3D, len(vertices))
+func vertexCentroid(vertices []Vertex) r3.Point {
+	positions := make([]r3.Point, len(vertices))
 	for i, v := range vertices {
 		positions[i] = v.Position()
 	}

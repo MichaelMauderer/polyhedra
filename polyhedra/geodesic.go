@@ -53,7 +53,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 			nV[j] = NewVertex()
 			ev := e.Vertices()
 			c := r3.WeightedCentroid(
-				[]r3.Point3D{
+				[]r3.Point{
 					vertexPositions[ev[0]],
 					vertexPositions[ev[1]],
 				},

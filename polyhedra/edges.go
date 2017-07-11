@@ -24,8 +24,8 @@ func (e Edge) Length() float64 {
 }
 
 // Center returns the midpoint of the Edge.
-func (e Edge) Center() r3.Point3D {
-	return r3.Centroid3D([]r3.Point3D{e.v1.Position(), e.v2.Position()})
+func (e Edge) Center() r3.Point {
+	return r3.Centroid3D([]r3.Point{e.v1.Position(), e.v2.Position()})
 }
 
 // Contains check whether either end point equals the given Vertex v.

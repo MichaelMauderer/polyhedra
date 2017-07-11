@@ -33,7 +33,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkEdges() error {
 		if ev[0] == ev[1] {
 			return errors.New("Edges contain illegal self-loops.")
 		}
-		zero := r3.Point3D{X: 0.0, Y: 0.0, Z: 0.0}
+		zero := r3.Point{X: 0.0, Y: 0.0, Z: 0.0}
 		if edge.Center() == zero {
 			return errors.New(fmt.Sprintf("Contains Edge %v centered at zero with vertices %v to %v", edge, ev[0].String(), ev[1].String()))
 		}
@@ -108,13 +108,13 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 // checkCenter checks that the polyhedron is centered at (0,0,0).
 func (gic IcosahedralGeodesicIntegrityChecker) checkCenter() error {
 	vertices := gic.vertices
-	positions := make([]r3.Point3D, len(vertices))
+	positions := make([]r3.Point, len(vertices))
 	for i := range vertices {
 		positions[i] = vertices[i].Position()
 	}
 	center := r3.Centroid3D(positions)
 	epsilon := 0.000001
-	if r3.Distance(center, r3.Point3D{0, 0, 0}) > epsilon {
+	if r3.Distance(center, r3.Point{0, 0, 0}) > epsilon {
 		return errors.New(fmt.Sprintf("Center has mvoed from origin to %v", center))
 
 	}
