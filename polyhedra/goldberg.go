@@ -14,7 +14,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 	// For each Edge create a new vertex
 	vertexMap := make(map[*Face]Vertex)
 	newVertices := make([]Vertex, 0)
-	for i, _ := range g.faces {
+	for i := range g.faces {
 		f := g.faces[i]
 		v := NewVertex()
 		vertexMap[&f] = v
