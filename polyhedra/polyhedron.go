@@ -57,7 +57,7 @@ func (p *polyhedron) Edges() []Edge {
 		for _, v := range p.vertices {
 			vns := p.vertexNeighbors[v]
 			for _, vn := range vns {
-				edges = append(edges, Edge{v, vn})
+				edges = append(edges, NewEdge(v, vn))
 			}
 		}
 		p.edgeCache = cullDuplicates(edges)
@@ -129,7 +129,7 @@ func (p *polyhedron) AddFace(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)
-		edges[i] = Edge{vertex, vertices[nextI]}
+		edges[i] = NewEdge(vertex, vertices[nextI])
 
 	}
 	f := NewFace(vertices)

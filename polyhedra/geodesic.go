@@ -74,9 +74,9 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		v1 := face.Loop()[1]
 		v2 := face.Loop()[2]
 
-		e0 := Edge{v0, v1}
-		e1 := Edge{v1, v2}
-		e2 := Edge{v2, v0}
+		e0 := NewEdge(v0, v1)
+		e1 := NewEdge(v1, v2)
+		e2 := NewEdge(v2, v0)
 
 		// Create subdivision vertices
 		vertexRows := make([][]Vertex, m+1)
