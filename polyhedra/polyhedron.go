@@ -1,12 +1,12 @@
 package polyhedra
 
 // NewPolyhedron creates a Polyhedron from the given vertices, edges and faces.
-func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) *Polyhedron {
+func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) (*Polyhedron, error) {
 	poly := Polyhedron{vertices: vertices}
 	poly.SetFaces(faces)
 	poly.vertexNeighbors = make(map[Vertex][]Vertex)
 	poly.AddEdges(edges)
-	return &poly
+	return &poly, nil
 }
 
 // Polyhedron represents a Polyhedron consisting of vertices, edges and faces.

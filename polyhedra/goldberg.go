@@ -9,7 +9,7 @@ type GoldbergPolyhedron struct {
 
 // GeodesicToGoldberg returns the goldberg Polyhedron that corresponds to the given geodesic Polyhedron.
 // This is achieved by replacing all faces with vertices and adding edges between vertices that corresponded to neighbouring faces.
-func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
+func GeodesicToGoldberg(g *Geodesic) (*GoldbergPolyhedron, error) {
 
 	// For each Edge create a new vertex
 	vertexMap := make(map[*Face]Vertex)
@@ -43,17 +43,20 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 	}
 
 	poly := GoldbergPolyhedron{}
-	poly.Interface = NewPolyhedron(newVertices, newEdges, newFaces)
-
+	var err error
+	poly.Interface, err = NewPolyhedron(newVertices, newEdges, newFaces)
+	if err != nil {
+		return nil, err
+	}
 	poly.m = g.m
 	poly.n = g.n
 
-	return &poly
+	return &poly, nil
 }
 
 func NewIcosahedralGoldbergPolyhedron(m int, n int) (*GoldbergPolyhedron, error) {
 	baseGeodesic := NewIcosahedralGeodesic()
 	baseGeodesic.Subdivide(m, n)
-	result := GeodesicToGoldberg(baseGeodesic)
-	return result, nil
+	result, err := GeodesicToGoldberg(baseGeodesic)
+	return result, err
 }
