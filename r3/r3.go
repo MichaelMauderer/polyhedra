@@ -1,3 +1,4 @@
+// Package r3 implements some utility functionality related to three-dimensional geometry.
 package r3
 
 import (
