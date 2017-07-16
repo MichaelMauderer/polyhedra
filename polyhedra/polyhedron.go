@@ -3,7 +3,7 @@ package polyhedra
 // NewPolyhedron creates a Polyhedron from the given vertices, edges and faces.
 func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) (*Polyhedron, error) {
 	poly := Polyhedron{vertices: vertices}
-	poly.SetFaces(faces)
+	poly.setFaces(faces)
 	poly.vertexNeighbors = make(map[Vertex][]Vertex)
 	poly.AddEdges(edges)
 	return &poly, nil
@@ -58,8 +58,8 @@ func (p *Polyhedron) Faces() []Face {
 	return p.faces
 }
 
-// AddVertex adds the given vertex to the Polyhedron.
-func (p *Polyhedron) AddVertex(v Vertex) {
+// addVertex adds the given vertex to the Polyhedron.
+func (p *Polyhedron) addVertex(v Vertex) {
 	p.vertices = append(p.vertices, v)
 }
 
@@ -74,7 +74,7 @@ func (p *Polyhedron) addSingleEdge(v1 Vertex, v2 Vertex) {
 }
 
 // AddEdge adds an Edge between the two given vertices.
-func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) {
+func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) error {
 	p.addSingleEdge(v1, v2)
 	p.addSingleEdge(v2, v1)
 
@@ -89,8 +89,8 @@ func (p *Polyhedron) AddEdges(edges []Edge) {
 	}
 }
 
-// SetEdges clears all current edges and adds the given edges instead.
-func (p *Polyhedron) SetEdges(edges []Edge) {
+// setEdges clears all current edges and adds the given edges instead.
+func (p *Polyhedron) setEdges(edges []Edge) {
 	p.vertexNeighbors = make(map[Vertex][]Vertex, len(edges))
 	p.AddEdges(edges)
 }
@@ -117,15 +117,15 @@ func (p *Polyhedron) AddFace(vertices []Vertex) {
 	p.addFace(f)
 }
 
-// AddFaces adds all the given faces to the Polyhedron.
-func (p *Polyhedron) AddFaces(faces []Face) {
+// addFaces adds all the given faces to the Polyhedron.
+func (p *Polyhedron) addFaces(faces []Face) {
 	for _, face := range faces {
 		p.addFace(face)
 	}
 }
 
-// SetFaces clears all current faces and adds the given faces instead.
-func (p *Polyhedron) SetFaces(faces []Face) {
+// setFaces clears all current faces and adds the given faces instead.
+func (p *Polyhedron) setFaces(faces []Face) {
 	p.faces = make([]Face, 0, len(faces))
 	p.edgeToFace = make(map[Edge][]Face, len(faces))
 	for _, face := range faces {

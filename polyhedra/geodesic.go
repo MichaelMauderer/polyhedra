@@ -167,8 +167,8 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		}
 	}
 
-	gg.SetEdges(newEdges)
-	gg.SetFaces(newFaces)
+	gg.setEdges(newEdges)
+	gg.setFaces(newFaces)
 	gg.m *= m
 	gg.n *= n
 
