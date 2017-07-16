@@ -11,6 +11,9 @@ func NewFace(loop []Vertex) Face {
 	return f
 }
 
+// Change the vertex array so it starts with the lowest Vertex, but keeps the relative order
+// of all vertices.
+// Example: [0,1,2] is reordered to [1,2,0]
 func normaliseLoop(loop []Vertex) []Vertex {
 	min := minVertexIndex(loop)
 	return append(loop[min:], loop[:min]...)

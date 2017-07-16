@@ -72,7 +72,7 @@ func vertexCentroid(vertices []Vertex) r3.Point {
 	return r3.Centroid3D(positions)
 }
 
-func minVertexIndex(v []Vertex) int{
+func minVertexIndex(v []Vertex) int {
 	var min int
 	var m Vertex
 	for i, e := range v {
