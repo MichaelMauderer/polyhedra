@@ -5,17 +5,17 @@ import (
 	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
-// Geodesic represents a geodesic polyhedron.
+// Geodesic represents a geodesic Polyhedron.
 // More information on geodesic polyhedra can be found at https://en.wikipedia.org/wiki/Geodesic_polyhedron
 type Geodesic struct {
-	polyhedron
+	Polyhedron
 	m, n int
 }
 
-// IcosahedralGeodesic represents a geodesic polyhedron with an icosahedron as a base.
+// IcosahedralGeodesic represents a geodesic Polyhedron with an icosahedron as a base.
 type IcosahedralGeodesic Geodesic
 
-// NewIcosahedralGeodesic creates a geodesic polyhedron from an icosahedron through subdivision.
+// NewIcosahedralGeodesic creates a geodesic Polyhedron from an icosahedron through subdivision.
 func NewIcosahedralGeodesic() *Geodesic {
 	ico := newIcosahedron()
 	geo := Geodesic{ico, 1, 0}

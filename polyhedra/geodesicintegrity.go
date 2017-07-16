@@ -10,7 +10,7 @@ import (
 )
 
 // IcosahedralGeodesicIntegrityChecker allows to check for certain features of an icosahedral geodesic.
-// This is mostly useful for debugging algorithms that modify a polyhedron to check that certain properties are not violated.
+// This is mostly useful for debugging algorithms that modify a Polyhedron to check that certain properties are not violated.
 type IcosahedralGeodesicIntegrityChecker IcosahedralGeodesic
 
 // checkFaces checks that the number of faces is a multiple of 20.
@@ -105,7 +105,7 @@ func (gic IcosahedralGeodesicIntegrityChecker) checkVertexDistances() error {
 	return nil
 }
 
-// checkCenter checks that the polyhedron is centered at (0,0,0).
+// checkCenter checks that the Polyhedron is centered at (0,0,0).
 func (gic IcosahedralGeodesicIntegrityChecker) checkCenter() error {
 	vertices := gic.vertices
 	positions := make([]r3.Point, len(vertices))

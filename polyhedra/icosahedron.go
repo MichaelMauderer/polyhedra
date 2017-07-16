@@ -11,9 +11,9 @@ func NewIcosahedron() Interface {
 	return &ico
 }
 
-func newIcosahedron() polyhedron {
+func newIcosahedron() Polyhedron {
 
-	ico := polyhedron{}
+	ico := Polyhedron{}
 	ico.init()
 
 	c1 := math.Cos(2.0 * math.Pi / 5.0)

@@ -1,13 +1,13 @@
 package polyhedra
 
-// GoldbergPolyhedron represents a polyhedron made of hexagons and pentagons.
+// GoldbergPolyhedron represents a Polyhedron made of hexagons and pentagons.
 // For more information see https://en.wikipedia.org/wiki/Goldberg_polyhedron
 type GoldbergPolyhedron struct {
 	Interface
 	m, n int
 }
 
-// GeodesicToGoldberg returns the goldberg polyhedron that corresponds to the given geodesic polyhedron.
+// GeodesicToGoldberg returns the goldberg Polyhedron that corresponds to the given geodesic Polyhedron.
 // This is achieved by replacing all faces with vertices and adding edges between vertices that corresponded to neighbouring faces.
 func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 

@@ -1,6 +1,6 @@
 package polyhedra
 
-// Interface represents the functionality provided by a polyhedron.
+// Interface represents the functionality provided by a Polyhedron.
 type Interface interface {
 	Vertices() []Vertex
 	Edges() []Edge

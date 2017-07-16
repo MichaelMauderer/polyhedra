@@ -5,7 +5,7 @@ import (
 	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
-// Vertex represents a point within a polyhedron where edges meet.
+// Vertex represents a point within a Polyhedron where edges meet.
 type Vertex uint
 
 // vertexId is the global id counter that is used to generate unique ids fo vertices.
