@@ -2,28 +2,28 @@ package polyhedra
 
 import "testing"
 
-func assertFaceCount(p Polyhedron, fn int, t *testing.T) {
+func assertFaceCount(p Interface, fn int, t *testing.T) {
 	faces := len(p.Faces())
 	if faces != fn {
 		t.Errorf("Wrong number of faces: %v instead of %v", faces, fn)
 	}
 }
 
-func assertEdgeCount(p Polyhedron, en int, t *testing.T) {
+func assertEdgeCount(p Interface, en int, t *testing.T) {
 	edges := len(p.Edges())
 	if edges != en {
 		t.Errorf("Wrong number of edges: %v instead of %v", edges, en)
 	}
 }
 
-func assertVertexCount(p Polyhedron, vn int, t *testing.T) {
+func assertVertexCount(p Interface, vn int, t *testing.T) {
 	vertices := len(p.Vertices())
 	if vertices != vn {
 		t.Errorf("Wrong number of vertices: %v instead of %v", vertices, vn)
 	}
 }
 
-func assertVertexDegrees(p Polyhedron, t *testing.T) {
+func assertVertexDegrees(p Interface, t *testing.T) {
 	vertices := p.Vertices()
 	for _, v := range vertices {
 		vd := p.VertexDegree(v)
@@ -33,7 +33,7 @@ func assertVertexDegrees(p Polyhedron, t *testing.T) {
 	}
 }
 
-func assertVertexAdjacentFaceCount(p Polyhedron, t *testing.T) {
+func assertVertexAdjacentFaceCount(p Interface, t *testing.T) {
 	vertices := p.Vertices()
 	for _, v := range vertices {
 		vd := len(p.VertexAdjacentFaces(v))

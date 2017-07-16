@@ -6,7 +6,7 @@ import (
 )
 
 // NewIcosahedron creates an icosahedron.
-func NewIcosahedron() Polyhedron {
+func NewIcosahedron() Interface {
 	ico := newIcosahedron()
 	return &ico
 }

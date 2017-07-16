@@ -3,7 +3,7 @@ package polyhedra
 // GoldbergPolyhedron represents a polyhedron made of hexagons and pentagons.
 // For more information see https://en.wikipedia.org/wiki/Goldberg_polyhedron
 type GoldbergPolyhedron struct {
-	Polyhedron
+	Interface
 	m, n int
 }
 
@@ -43,7 +43,7 @@ func GeodesicToGoldberg(g *Geodesic) *GoldbergPolyhedron {
 	}
 
 	poly := GoldbergPolyhedron{}
-	poly.Polyhedron = NewPolyhedron(newVertices, newEdges, newFaces)
+	poly.Interface = NewPolyhedron(newVertices, newEdges, newFaces)
 
 	poly.m = g.m
 	poly.n = g.n
