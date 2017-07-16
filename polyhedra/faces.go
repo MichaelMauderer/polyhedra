@@ -1,8 +1,8 @@
 package polyhedra
 
 import (
-	"github.com/MichaelMauderer/polyhedra/r3"
 	"fmt"
+	"github.com/MichaelMauderer/polyhedra/r3"
 )
 
 // NewFace creates a Face from the given list of vertices.

@@ -41,7 +41,6 @@ func TestIcosahedronCreation(t *testing.T) {
 	}
 }
 
-
 func TestIcosahedronEdgeOrder(t *testing.T) {
 	ico1 := NewIcosahedron()
 	ico2 := NewIcosahedron()
@@ -61,4 +60,3 @@ func TestIcosahedronEdgeOrder(t *testing.T) {
 		}
 	}
 }
-
