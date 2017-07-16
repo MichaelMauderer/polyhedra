@@ -5,10 +5,15 @@ import "github.com/MichaelMauderer/polyhedra/r3"
 // NewFace creates a Face from the given list of vertices.
 func NewFace(loop []Vertex) Face {
 	f := Face{}
-	f.loop = loop
+	f.loop = normaliseLoop(loop)
 	f.initEdges()
 	f.initCenter()
 	return f
+}
+
+func normaliseLoop(loop []Vertex) []Vertex {
+	min := minVertexIndex(loop)
+	return append(loop[min:], loop[:min]...)
 }
 
 type Face struct {
