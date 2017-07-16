@@ -67,3 +67,7 @@ func (f *Face) Equals(fo Face) bool {
 	}
 	return true
 }
+
+func (f *Face) String() string {
+	return fmt.Sprintf("Face(%v)", f.loop)
+}
