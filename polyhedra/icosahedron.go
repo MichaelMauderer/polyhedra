@@ -57,8 +57,11 @@ func newIcosahedron() Polyhedron {
 			neighborLIndex := (5 + i - 1) % 5
 			neighborL := pentagon[neighborLIndex]
 
-			ico.AddEdge(vertex, neighborL)
-			ico.AddEdge(vertex, poleVertex)
+			err := ico.AddEdge(vertex, neighborL)
+			err = ico.AddEdge(vertex, poleVertex)
+			if err != nil {
+				panic("Added illegal edge.")
+			}
 
 			ico.AddFace([]Vertex{vertex, neighborL, poleVertex})
 		}
@@ -72,8 +75,12 @@ func newIcosahedron() Polyhedron {
 		bottomNeighbor := bottomPentagon[(5+i-1)%5]
 		topNeighbor := topPentagon[i]
 
-		ico.AddEdge(vertex, topNeighbor)
+		err := ico.AddEdge(vertex, topNeighbor)
+		if err != nil {
+			panic("Added illegal edge.")
+		}
 		ico.AddFace([]Vertex{vertex, topNeighbor, bottomNeighbor})
+
 	}
 
 	//Connect top pentagon

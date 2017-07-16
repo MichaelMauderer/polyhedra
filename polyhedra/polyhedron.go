@@ -79,13 +79,17 @@ func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) error {
 	p.addSingleEdge(v2, v1)
 
 	p.resetEdgeCache()
+	return nil
 }
 
 // AddEdges adds the given edges to the Polyhedron.
 func (p *Polyhedron) AddEdges(edges []Edge) {
 	for _, e := range edges {
 		v := e.Vertices()
-		p.AddEdge(v[0], v[1])
+		err := p.AddEdge(v[0], v[1])
+		if err != nil {
+			panic("Added illegal edge.")
+		}
 	}
 }
 
