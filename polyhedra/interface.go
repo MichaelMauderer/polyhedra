@@ -6,9 +6,6 @@ type Interface interface {
 	Edges() []Edge
 	Faces() []Face
 
-	AddEdge(Vertex, Vertex) error
-	AddFace([]Vertex)
-
 	VertexDegree(vertex Vertex) int
 	AdjacentVertices(vertex Vertex) []Vertex
 

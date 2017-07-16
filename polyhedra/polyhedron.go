@@ -5,7 +5,7 @@ func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) (*Polyhedron, 
 	poly := Polyhedron{vertices: vertices}
 	poly.setFaces(faces)
 	poly.vertexNeighbors = make(map[Vertex][]Vertex)
-	poly.AddEdges(edges)
+	poly.addEdges(edges)
 	return &poly, nil
 }
 
@@ -73,8 +73,8 @@ func (p *Polyhedron) addSingleEdge(v1 Vertex, v2 Vertex) {
 	p.vertexNeighbors[v1] = append(vn, v2)
 }
 
-// AddEdge adds an Edge between the two given vertices.
-func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) error {
+// addEdge adds an Edge between the two given vertices.
+func (p *Polyhedron) addEdge(v1 Vertex, v2 Vertex) error {
 	p.addSingleEdge(v1, v2)
 	p.addSingleEdge(v2, v1)
 
@@ -82,11 +82,11 @@ func (p *Polyhedron) AddEdge(v1 Vertex, v2 Vertex) error {
 	return nil
 }
 
-// AddEdges adds the given edges to the Polyhedron.
-func (p *Polyhedron) AddEdges(edges []Edge) {
+// addEdges adds the given edges to the Polyhedron.
+func (p *Polyhedron) addEdges(edges []Edge) {
 	for _, e := range edges {
 		v := e.Vertices()
-		err := p.AddEdge(v[0], v[1])
+		err := p.addEdge(v[0], v[1])
 		if err != nil {
 			panic("Added illegal edge.")
 		}
@@ -96,7 +96,7 @@ func (p *Polyhedron) AddEdges(edges []Edge) {
 // setEdges clears all current edges and adds the given edges instead.
 func (p *Polyhedron) setEdges(edges []Edge) {
 	p.vertexNeighbors = make(map[Vertex][]Vertex, len(edges))
-	p.AddEdges(edges)
+	p.addEdges(edges)
 }
 
 // addFace adds the given Face to the Polyhedron.
@@ -109,8 +109,8 @@ func (p *Polyhedron) addFace(f Face) {
 	}
 }
 
-// AddFace adds a Face defined by the given vertices to the Polyhedron.
-func (p *Polyhedron) AddFace(vertices []Vertex) {
+// addFaceFromLoop adds a Face defined by the given vertices to the Polyhedron.
+func (p *Polyhedron) addFaceFromLoop(vertices []Vertex) {
 	edges := make([]Edge, len(vertices))
 	for i, vertex := range vertices {
 		nextI := (i + 1) % len(vertices)

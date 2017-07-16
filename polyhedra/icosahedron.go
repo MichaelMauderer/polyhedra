@@ -57,13 +57,13 @@ func newIcosahedron() Polyhedron {
 			neighborLIndex := (5 + i - 1) % 5
 			neighborL := pentagon[neighborLIndex]
 
-			err := ico.AddEdge(vertex, neighborL)
-			err = ico.AddEdge(vertex, poleVertex)
+			err := ico.addEdge(vertex, neighborL)
+			err = ico.addEdge(vertex, poleVertex)
 			if err != nil {
 				panic("Added illegal edge.")
 			}
 
-			ico.AddFace([]Vertex{vertex, neighborL, poleVertex})
+			ico.addFaceFromLoop([]Vertex{vertex, neighborL, poleVertex})
 		}
 	}
 	// Connect bottom and top poles
@@ -75,11 +75,11 @@ func newIcosahedron() Polyhedron {
 		bottomNeighbor := bottomPentagon[(5+i-1)%5]
 		topNeighbor := topPentagon[i]
 
-		err := ico.AddEdge(vertex, topNeighbor)
+		err := ico.addEdge(vertex, topNeighbor)
 		if err != nil {
 			panic("Added illegal edge.")
 		}
-		ico.AddFace([]Vertex{vertex, topNeighbor, bottomNeighbor})
+		ico.addFaceFromLoop([]Vertex{vertex, topNeighbor, bottomNeighbor})
 
 	}
 
@@ -88,8 +88,8 @@ func newIcosahedron() Polyhedron {
 		topNeighbor := topPentagon[(5+i-1)%5]
 		bottomNeighbor := bottomPentagon[(5+i-1)%5]
 
-		ico.AddEdge(vertex, bottomNeighbor)
-		ico.AddFace([]Vertex{vertex, topNeighbor, bottomNeighbor})
+		ico.addEdge(vertex, bottomNeighbor)
+		ico.addFaceFromLoop([]Vertex{vertex, topNeighbor, bottomNeighbor})
 	}
 	return ico
 }
