@@ -1,7 +1,7 @@
 package polyhedra
 
 // NewPolyhedron creates a Polyhedron from the given vertices, edges and faces.
-func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) Interface {
+func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) *Polyhedron {
 	poly := Polyhedron{vertices: vertices}
 	poly.SetFaces(faces)
 	poly.vertexNeighbors = make(map[Vertex][]Vertex)
