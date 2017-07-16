@@ -55,6 +55,9 @@ func GeodesicToGoldberg(g *Geodesic) (*GoldbergPolyhedron, error) {
 	return &poly, nil
 }
 
+
+// NewIcosahedralGoldbergPolyhedron creates a new GoldbergPolyhedron that has an icosahedron as a base and is subdivided
+// according to the breakdown (n,m).
 func NewIcosahedralGoldbergPolyhedron(m int, n int) (*GoldbergPolyhedron, error) {
 	baseGeodesic := NewIcosahedralGeodesic()
 	baseGeodesic.Subdivide(m, n)

@@ -82,9 +82,9 @@ func subdividedFace(face Face, gg *Geodesic, m int, newEdgeSet map[Edge]bool, ve
 	getReplacements := func(e Edge) []Vertex {
 		rep := vertexToEdgeMap[e]
 		if rep == nil {
-			rep_reversed := vertexToEdgeMap[e.Reversed()]
-			rep = make([]Vertex, len(rep_reversed))
-			copy(rep, rep_reversed)
+			repReversed := vertexToEdgeMap[e.Reversed()]
+			rep = make([]Vertex, len(repReversed))
+			copy(rep, repReversed)
 			for i, j := 0, len(rep)-1; i < j; i, j = i+1, j-1 {
 				rep[i], rep[j] = rep[j], rep[i]
 			}
@@ -164,7 +164,7 @@ func (gg *Geodesic) Subdivide(m, n int) error {
 		return nil
 	}
 	if m != 2 {
-		return errors.New("Only (m=2,n=0) subdivision supported.")
+		return errors.New("only (m=2,n=0) subdivision supported")
 	}
 
 	t := m*m + m*n + n*n

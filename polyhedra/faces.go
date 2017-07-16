@@ -22,6 +22,7 @@ func normaliseLoop(loop []Vertex) []Vertex {
 	return append(loop[min:], loop[:min]...)
 }
 
+// Face represents a face on a polyhedron.
 type Face struct {
 	loop   []Vertex
 	edges  []Edge
@@ -59,6 +60,7 @@ func (f *Face) Center() r3.Point {
 	return f.center
 }
 
+// Equals checks whether two faces are the same.
 func (f *Face) Equals(fo Face) bool {
 	if len(f.loop) != len(fo.loop) {
 		return false

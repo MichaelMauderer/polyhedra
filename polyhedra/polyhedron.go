@@ -145,6 +145,7 @@ func (p *Polyhedron) VertexDegree(vertex Vertex) int {
 	return len(p.vertexNeighbors[vertex])
 }
 
+// VertexAdjacentFaces returns all faces that contain the given vertex.
 func (p *Polyhedron) VertexAdjacentFaces(v Vertex) []Face {
 	resultFaces := make([]Face, 0)
 	for i, face := range p.faces {

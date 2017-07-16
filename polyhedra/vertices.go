@@ -8,16 +8,16 @@ import (
 // Vertex represents a point within a Polyhedron where edges meet.
 type Vertex uint
 
-// vertexId is the global id counter that is used to generate unique ids fo vertices.
-var vertexId Vertex = 0
+// vertexID is the global id counter that is used to generate unique ids fo vertices.
+var vertexID Vertex
 
 // vertexPositions contains the position for each vertex.
 var vertexPositions = make(map[Vertex]r3.Point)
 
 // NewVertex creates an new vertex.
 func NewVertex() Vertex {
-	vertexId++
-	return vertexId
+	vertexID++
+	return vertexID
 }
 
 // setPosition sets the position of the vertex.

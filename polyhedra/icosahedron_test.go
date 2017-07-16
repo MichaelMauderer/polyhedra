@@ -29,14 +29,14 @@ func TestIcosahedronCreation(t *testing.T) {
 	}
 
 	for _, vertex := range ico.vertices {
-		edge_count := 0
+		edgeCount := 0
 		for _, edge := range ico.Edges() {
 			if edge.Contains(vertex) {
-				edge_count++
+				edgeCount++
 			}
 		}
-		if edge_count != 5 {
-			t.Errorf("Vertex %v has %v edges instaed of 5", vertex, edge_count)
+		if edgeCount != 5 {
+			t.Errorf("Vertex %v has %v edges instaed of 5", vertex, edgeCount)
 		}
 	}
 }
