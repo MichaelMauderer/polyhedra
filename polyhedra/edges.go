@@ -9,7 +9,7 @@ import (
 // NewEdge creates a new edge from two vertices.
 func NewEdge(v1, v2 Vertex) Edge {
 	if v1 > v2 {
-	    return Edge{v2, v1}
+		return Edge{v2, v1}
 	}
 	return Edge{v1, v2}
 }

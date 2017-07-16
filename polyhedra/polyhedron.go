@@ -1,8 +1,6 @@
 // Package polyhedra implements basic functionality to create and modify geometric polyhedra.
 package polyhedra
 
-
-
 // NewPolyhedron creates a Polyhedron from the given vertices, edges and faces.
 func NewPolyhedron(vertices []Vertex, edges []Edge, faces []Face) (*Polyhedron, error) {
 	poly := Polyhedron{vertices: vertices}
